@@ -3,6 +3,7 @@ import {Button, View} from 'react-native';
 import {Text} from '@rneui/base';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Config from "react-native-config";
 
 export default class ProfileScreen extends React.Component {
     constructor(props) {
@@ -12,7 +13,7 @@ export default class ProfileScreen extends React.Component {
             currentUser: null,
         };
         GoogleSignin.configure({
-            androidClientId: '1051098629776-kmkcsg4uaugn8um88vnubb5alna1t824.apps.googleusercontent.com',
+            androidClientId: Config.OAUTH_KEY,
             iosClientId: 'ADD_YOUR_iOS_CLIENT_ID_HERE',
         });
     }

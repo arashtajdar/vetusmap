@@ -5,7 +5,7 @@ import { Marker, Callout} from 'react-native-maps';
 import {Text, Icon, SearchBar, Button} from '@rneui/base';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
-
+import locationData from '../assets/response.json'
 export default class Map extends React.Component {
 
     // Constructor
@@ -19,31 +19,37 @@ export default class Map extends React.Component {
             distance: 40,
             selectMarker: null,
             showSearchSection: false, // Add this state for showing/hiding the search section
-            loading: true, // Initialize as loading
+            loading: false, // Initialize as loading
+            bottomTooFarMessage: false, // Initialize as loading
         }
     }
 
     // component actions
     componentDidMount = () => {
 
-        axios.get('https://2295a967-bf39-4526-948c-169b249616fd.mock.pstmn.io/api/locations')
-            .then((response) => {
-                const mapResponseData = response.data.data;
-
-                if (Array.isArray(mapResponseData)) {
-                    this.setState({
-                        markers: mapResponseData,
-                        loading: false, // Data has been loaded
-                    });
-                } else {
-                    console.error('API response is not an array:', mapResponseData);
-                    this.setState({ loading: false }); // Set loading to false in case of an error
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching data from the API:', error);
-                this.setState({ loading: false }); // Set loading to false in case of an error
-            });
+        // axios.get('https://2295a967-bf39-4526-948c-169b249616fd.mock.pstmn.io/api/locations')
+        //     .then((response) => {
+        //         const mapResponseData = response.data.data;
+        //             console.log('repsonse reciveid');
+        //         if (Array.isArray(mapResponseData)) {
+        //             this.setState({
+        //                 markers: mapResponseData,
+        //                 loading: false, // Data has been loaded
+        //             });
+        //         } else {
+        //             console.error('API response is not an array:', mapResponseData);
+        //             this.setState({ loading: false }); // Set loading to false in case of an error
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error fetching data from the API:', error);
+        //         this.setState({ loading: false }); // Set loading to false in case of an error
+        //     });
+        this.setState({
+            markers: [],
+            loading: false, // Data has been loaded
+            bottomTooFarMessage: false, // Data has been loaded
+        });
     }
 
 
@@ -53,8 +59,8 @@ export default class Map extends React.Component {
             this.mapRef.animateToRegion({
                 latitude: loc.coords.latitude,
                 longitude: loc.coords.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.007,
             })
             this.setState({
                 latitude: loc.coords.latitude,
@@ -62,6 +68,36 @@ export default class Map extends React.Component {
             })
         })
     }
+    handleRegionChangeComplete = (region) => {
+        // You can access the visible region data from the 'region' object.
+        console.log('Visible Region Data:', region);
+        // You can store it in the state or perform any other actions as needed.
+
+        const { latitude, latitudeDelta, longitude, longitudeDelta } = region;
+        if(latitudeDelta*1000 > 30){
+            this.setState({
+                bottomTooFarMessage: true, // Data has been loaded
+            })
+        }else{
+            this.setState({
+                bottomTooFarMessage: false, // Data has been loaded
+            });
+            const filteredLocations = locationData.data.filter(marker => {
+                return (
+                    marker.latitude >= latitude - latitudeDelta / 2 &&
+                    marker.latitude <= latitude + latitudeDelta / 2 &&
+                    marker.longitude >= longitude - longitudeDelta / 2 &&
+                    marker.longitude <= longitude + longitudeDelta / 2
+                );
+            });
+
+            this.setState({
+                markers: filteredLocations,
+            });
+        }
+
+    }
+
     searchSection = () => {
         const handleSearchLocationsNames = () => {
             let filteredLocations = mapResponse.data.filter(g => g.name.toLowerCase().includes(this.state.searchString.toLowerCase()))
@@ -130,7 +166,9 @@ export default class Map extends React.Component {
                              longitude: 79.8895,
                              latitudeDelta: 0.0922,
                              longitudeDelta: 0.0421
-                         }}>
+                         }}
+                         onRegionChangeComplete={this.handleRegionChangeComplete} // Add this line
+                >
                     {
                         this.state.markers.map((marker)=>{
                             return(
@@ -181,6 +219,16 @@ export default class Map extends React.Component {
                     // Show a loading indicator (e.g., a spinner)
                     <View style={styles.bottomTextContainer}>
                         <Text style={styles.bottomText}>Loading data...</Text>
+                    </View>
+                ) : (
+                    // Show a small text at the bottom when not loading
+                    <View>
+                    </View>
+                )}
+                {this.state.bottomTooFarMessage ? (
+                    // Show a loading indicator (e.g., a spinner)
+                    <View style={styles.bottomTextContainer}>
+                        <Text style={styles.bottomText}>Please zoom in to show the markers!</Text>
                     </View>
                 ) : (
                     // Show a small text at the bottom when not loading

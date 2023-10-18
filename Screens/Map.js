@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, StyleSheet, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+// import MapView from "react-native-map-clustering";
 import { Marker, Callout} from 'react-native-maps';
 import {Text, Icon, SearchBar, Button} from '@rneui/base';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
-import locationData from '../assets/response.json'
 export default class Map extends React.Component {
 
     // Constructor
@@ -15,11 +15,12 @@ export default class Map extends React.Component {
             latitude: 24.723456,
             longitude: 46.70095,
             markers: [],
+            locationData: [],
             searchString: "",
             distance: 40,
             selectMarker: null,
             showSearchSection: false, // Add this state for showing/hiding the search section
-            loading: false, // Initialize as loading
+            loading: true, // Initialize as loading
             bottomTooFarMessage: false, // Initialize as loading
         }
     }
@@ -27,27 +28,26 @@ export default class Map extends React.Component {
     // component actions
     componentDidMount = () => {
 
-        // axios.get('https://2295a967-bf39-4526-948c-169b249616fd.mock.pstmn.io/api/locations')
-        //     .then((response) => {
-        //         const mapResponseData = response.data.data;
-        //             console.log('repsonse reciveid');
-        //         if (Array.isArray(mapResponseData)) {
-        //             this.setState({
-        //                 markers: mapResponseData,
-        //                 loading: false, // Data has been loaded
-        //             });
-        //         } else {
-        //             console.error('API response is not an array:', mapResponseData);
-        //             this.setState({ loading: false }); // Set loading to false in case of an error
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error fetching data from the API:', error);
-        //         this.setState({ loading: false }); // Set loading to false in case of an error
-        //     });
+        axios.get('https://2295a967-bf39-4526-948c-169b249616fd.mock.pstmn.io/api/locations')
+            .then((response) => {
+                const mapResponseData = response.data.data;
+                if (Array.isArray(mapResponseData)) {
+                    this.state.locationData = mapResponseData;
+                    this.setState({
+                        markers: mapResponseData,
+                        loading: false, // Data has been loaded
+                    });
+                } else {
+                    console.error('API response is not an array:', mapResponseData);
+                    this.setState({ loading: false }); // Set loading to false in case of an error
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching data from the API:', error);
+                this.setState({ loading: false }); // Set loading to false in case of an error
+            });
         this.setState({
             markers: [],
-            loading: false, // Data has been loaded
             bottomTooFarMessage: false, // Data has been loaded
         });
     }
@@ -82,7 +82,7 @@ export default class Map extends React.Component {
             this.setState({
                 bottomTooFarMessage: false, // Data has been loaded
             });
-            const filteredLocations = locationData.data.filter(marker => {
+            const filteredLocations = this.state.locationData.filter(marker => {
                 return (
                     marker.latitude >= latitude - latitudeDelta / 2 &&
                     marker.latitude <= latitude + latitudeDelta / 2 &&
@@ -218,7 +218,7 @@ export default class Map extends React.Component {
                 {this.state.loading ? (
                     // Show a loading indicator (e.g., a spinner)
                     <View style={styles.bottomTextContainer}>
-                        <Text style={styles.bottomText}>Loading data...</Text>
+                        <Text style={[styles.bottomText, styles.bottomTextInfo]}>Fetching the fresh data ....</Text>
                     </View>
                 ) : (
                     // Show a small text at the bottom when not loading
@@ -228,10 +228,9 @@ export default class Map extends React.Component {
                 {this.state.bottomTooFarMessage ? (
                     // Show a loading indicator (e.g., a spinner)
                     <View style={styles.bottomTextContainer}>
-                        <Text style={styles.bottomText}>Please zoom in to show the markers!</Text>
+                        <Text style={[styles.bottomText, styles.bottomTextError]}>Please zoom in to show the markers!</Text>
                     </View>
                 ) : (
-                    // Show a small text at the bottom when not loading
                     <View>
                     </View>
                 )}
@@ -299,7 +298,13 @@ const styles = StyleSheet.create({
 
     bottomText: {
         fontSize: 16,
-        color: '#123456', // Adjust the color to your preference
+        color: '#000000', // Adjust the color to your preference
         fontWeight: 'bold',
+    },
+    bottomTextInfo: {
+        color: '#0aad00', // Adjust the color to your preference
+    },
+    bottomTextError: {
+        color: '#f80025', // Adjust the color to your preference
     },
 });

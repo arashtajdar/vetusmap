@@ -39,6 +39,19 @@ export default class MapScreen extends React.Component {
                 const mapResponseData = response.data.data;
                 if (Array.isArray(mapResponseData)) {
                     this.state.locationData = mapResponseData;
+                    Geolocation.getCurrentPosition(loc => {
+                        const filteredLocations = this.state.locationData.filter(marker => {
+                            return (
+                                marker.latitude >= loc.coords.latitude - constants.initialLatDelta / 2 &&
+                                marker.latitude <= loc.coords.latitude + constants.initialLatDelta / 2 &&
+                                marker.longitude >= loc.coords.longitude - constants.initialLongDelta / 2 &&
+                                marker.longitude <= loc.coords.longitude + constants.initialLongDelta / 2
+                            );
+                        });
+                        this.setState({
+                            markers: filteredLocations,
+                        });
+                    });
                     this.setState({
                         loading: false, // Data has been loaded
                     });

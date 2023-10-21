@@ -1,4 +1,3 @@
-export const dbName = 'vetus';
 export const initialLat = 6.8523;
 export const initialLong = 79.8895;
 export const initialLatDelta = 0.01;

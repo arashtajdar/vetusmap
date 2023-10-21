@@ -1,26 +1,15 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-// import MapView from "react-native-map-clustering";
 import {Marker, Callout} from 'react-native-maps';
 import {Text} from '@rneui/base';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
-// noinspection ES6CheckImport
-import {openDatabase} from 'react-native-sqlite-storage';
 import { styles } from '../Helpers/AppStyles'; // Adjust the import path
-// Constants
 import * as constants from '../Helpers/Constants'
+import {database} from '../Helpers/Database';
 
-const db = openDatabase({
-    name: constants.dbName,
-    location: 'default',
-}, () => {
-    console.log('ok shod');
-}, (error) => {
-    console.log('db rid');
-    console.log(error);
-});
+const db = database;
 
 export default class MapScreen extends React.Component {
 

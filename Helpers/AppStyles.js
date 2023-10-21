@@ -1,6 +1,4 @@
-// AppStyles.js
-
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
     buttonContainer: {
@@ -64,5 +62,31 @@ export const styles = StyleSheet.create({
     },
     bottomTextError: {
         color: '#f80025',
+    },
+    mapSectionMainView: {
+        height: '100%', paddingTop: 45, backgroundColor: '#123456',
+    },
+    markerImageMainView: {
+        width: 30, height: 30,
+    },
+    markerImage: {
+        width: '100%',
+        height: '100%',
+    },
+    markerCallout: {
+        height: 150,
+        width: 150,
+    },
+    markerCalloutView: {
+        flex: 1,
+        justifyContent: 'space-between',
+    },
+    markerCalloutImage: {
+        width: 150,
+        height: 100,
+    },
+    mapMainRenderView: {
+        flexDirection: 'column',
+        flex: 1,
     },
 });

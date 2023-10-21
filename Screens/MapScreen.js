@@ -114,7 +114,7 @@ export default class MapScreen extends React.Component {
             );
         };
         return (
-            <View style={{height: '100%', paddingTop: 45, backgroundColor: '#123456'}}>
+            <View style={styles.mapSectionMainView}>
                 <MapView style={{...StyleSheet.absoluteFillObject}}
                          customMapStyle={mapStyle}
                          provider={PROVIDER_GOOGLE}
@@ -146,21 +146,21 @@ export default class MapScreen extends React.Component {
                                     key={marker.id}
                                     coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
                                 >
-                                    <View style={{width: 30, height: 30}}>
+                                    <View style={styles.markerImageMainView}>
                                         <Image
                                             source={markerImages[marker.category_id]}
-                                            style={{width: '100%', height: '100%'}}
+                                            style={styles.markerImage}
                                         />
                                     </View>
-                                    <Callout style={{height: 150, width: 150}} onPress={() => {
+                                    <Callout style={styles.markerCallout} onPress={() => {
                                         selectLocation(marker);
                                     }}>
-                                        <View style={{flex: 1, justifyContent: 'space-between'}}>
+                                        <View style={styles.markerCalloutView}>
                                             <Text>{marker.name}</Text>
                                             <Text>{marker.category_id}</Text>
-                                            <Image style={{width: 150, height: 100}}
-                                                   source={require('../assets/images/nasoni.jpg')}></Image>
-                                            <Text style={{fontStyle: 'italic'}}>Tap for more details...</Text>
+                                            <Image style={styles.markerCalloutImage}
+                                                   source={require('../assets/images/nasoni.jpg')}/>
+                                            <Text>Tap for more details...</Text>
                                         </View>
                                     </Callout>
                                 </Marker>
@@ -175,7 +175,7 @@ export default class MapScreen extends React.Component {
     // Main render part
     render() {
         return (
-            <View style={{flexDirection: 'column', flex: 1}}>
+            <View style={styles.mapMainRenderView}>
                 <View>
                     {this.mapSection()}
                 </View>
@@ -185,56 +185,50 @@ export default class MapScreen extends React.Component {
                     <View style={styles.bottomTextContainer}>
                         <Text style={[styles.bottomText, styles.bottomTextInfo]}>{constants.msgFetchingFreshData}</Text>
                     </View>
-                ) : (
-                    <View>
-                    </View>
-                )}
+                ) : null}
                 {this.state.bottomTooFarMessage ? (
                     <View style={styles.bottomTextContainer}>
                         <Text
                             style={[styles.bottomText, styles.bottomTextError]}>{constants.msgZoomOutLimitReached}</Text>
                     </View>
-                ) : (
-                    <View>
-                    </View>
-                )}
+                ) : null}
             </View>
         );
     }
 }
 const mapStyle = [
     {
-        "featureType": "administrative",
-        "elementType": "geometry",
-        "stylers": [
+        'featureType': 'administrative',
+        'elementType': 'geometry',
+        'stylers': [
             {
-                "visibility": "off"
-            }
-        ]
+                'visibility': 'off',
+            },
+        ],
     },
     {
-        "featureType": "poi",
-        "stylers": [
+        'featureType': 'poi',
+        'stylers': [
             {
-                "visibility": "off"
-            }
-        ]
+                'visibility': 'off',
+            },
+        ],
     },
     {
-        "featureType": "road",
-        "elementType": "labels.icon",
-        "stylers": [
+        'featureType': 'road',
+        'elementType': 'labels.icon',
+        'stylers': [
             {
-                "visibility": "off"
-            }
-        ]
+                'visibility': 'off',
+            },
+        ],
     },
     {
-        "featureType": "transit",
-        "stylers": [
+        'featureType': 'transit',
+        'stylers': [
             {
-                "visibility": "off"
-            }
-        ]
-    }
+                'visibility': 'off',
+            },
+        ],
+    },
 ];

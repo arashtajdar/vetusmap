@@ -78,7 +78,6 @@ export const styles = StyleSheet.create({
   },
   markerCalloutView: {
     alignItems: 'center',
-
   },
   markerCalloutImage: {
     width: 150,
@@ -91,6 +90,10 @@ export const styles = StyleSheet.create({
   locationScreenImage: {
     width: '100%',
     height: '50%',
+  },
+  locationMainView: {
+    width: '100%',
+    height: '100%',
   },
   ProfileContainer: {
     flex: 1,

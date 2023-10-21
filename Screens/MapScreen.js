@@ -8,8 +8,6 @@ import axios from 'axios';
 import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
 import {markerImages} from '../Helpers/MarkerImages';
-import nasoniImage from '../assets/images/nasoni.jpg';
-import {btnMoreInfo} from '../Helpers/Constants';
 
 export default class MapScreen extends React.Component {
   // Constructor

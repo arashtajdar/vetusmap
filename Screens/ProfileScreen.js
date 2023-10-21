@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { View, Text, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import React, {Component} from 'react';
+import {View, Text, Button, Image} from 'react-native';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from 'react-native-config';
 import {styles} from '../Helpers/AppStyles';
@@ -27,32 +27,32 @@ class ProfileScreen extends Component {
     const isSignedIn = await GoogleSignin.isSignedIn();
     if (isSignedIn) {
       const user = await AsyncStorage.getItem('user'); // Retrieve user data from storage
-      this.setState({ isLoggedIn: true, currentUser: JSON.parse(user) });
+      this.setState({isLoggedIn: true, currentUser: JSON.parse(user)});
     } else {
-      this.setState({ isLoggedIn: false });
+      this.setState({isLoggedIn: false});
     }
   };
 
   handleSignIn = () => {
     GoogleSignin.hasPlayServices()
-        .then(async hasPlayService => {
-          if (hasPlayService) {
-            GoogleSignin.signIn()
-                .then(async userInfo => {
-                  // Update the state with user data before storing it in AsyncStorage
-                  this.setState({ isLoggedIn: true, currentUser: userInfo });
+      .then(async hasPlayService => {
+        if (hasPlayService) {
+          GoogleSignin.signIn()
+            .then(async userInfo => {
+              // Update the state with user data before storing it in AsyncStorage
+              this.setState({isLoggedIn: true, currentUser: userInfo});
 
-                  // Store user data in AsyncStorage for persistence
-                  await AsyncStorage.setItem('user', JSON.stringify(userInfo));
-                })
-                .catch(error => {
-                  console.log('Error during sign-in: ', error);
-                });
-          }
-        })
-        .catch(error => {
-          console.log('Error during sign-in: ', error);
-        });
+              // Store user data in AsyncStorage for persistence
+              await AsyncStorage.setItem('user', JSON.stringify(userInfo));
+            })
+            .catch(error => {
+              console.log('Error during sign-in: ', error);
+            });
+        }
+      })
+      .catch(error => {
+        console.log('Error during sign-in: ', error);
+      });
   };
 
   handleSignOut = async () => {
@@ -74,27 +74,27 @@ class ProfileScreen extends Component {
 
   render() {
     return (
-        <View style={styles.ProfileContainer}>
-          <Text style={styles.title}>Profile</Text>
+      <View style={styles.ProfileContainer}>
+        <Text style={styles.title}>Profile</Text>
 
-          {this.state.isLoggedIn ? (
-              <View>
-                {this.state.currentUser && this.state.currentUser.user && (
-                    <View style={styles.userInfo}>
-                      <Image
-                          source={{ uri: this.state.currentUser.user.photo }}
-                          style={styles.userImage}
-                      />
-                      <Text>{this.state.currentUser.user.name}</Text>
-                      <Text>{this.state.currentUser.user.email}</Text>
-                    </View>
-                )}
-                <Button title="Sign out" onPress={this.handleSignOut} />
+        {this.state.isLoggedIn ? (
+          <View>
+            {this.state.currentUser && this.state.currentUser.user && (
+              <View style={styles.userInfo}>
+                <Image
+                  source={{uri: this.state.currentUser.user.photo}}
+                  style={styles.userImage}
+                />
+                <Text>{this.state.currentUser.user.name}</Text>
+                <Text>{this.state.currentUser.user.email}</Text>
               </View>
-          ) : (
-              <Button title="Sign in with Google" onPress={this.handleSignIn} />
-          )}
-        </View>
+            )}
+            <Button title="Sign out" onPress={this.handleSignOut} />
+          </View>
+        ) : (
+          <Button title="Sign in with Google" onPress={this.handleSignIn} />
+        )}
+      </View>
     );
   }
 }

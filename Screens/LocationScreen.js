@@ -23,12 +23,9 @@ export default class LocationScreen extends React.Component {
   render() {
     if (this.state.thisLocation != null) {
       return (
-        <View style={{with:'99%',height: '99%'}}>
+        <View style={styles.locationMainView}>
           <Text>{this.state.thisLocation.name}</Text>
-            <Image
-                style={styles.locationScreenImage}
-                source={nasoniImage}
-            />
+          <Image style={styles.locationScreenImage} source={nasoniImage} />
         </View>
       );
     }

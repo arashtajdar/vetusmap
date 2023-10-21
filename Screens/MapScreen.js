@@ -30,7 +30,6 @@ export default class MapScreen extends React.Component {
         this.callApiToUpdateMap();
     };
 
-
     // Functions
     callApiToUpdateMap = () => {
         console.log('calling api....');

@@ -11,7 +11,8 @@
     "gradle:clean": "cd android && ./gradlew clean",
     "gradle:build": "cd android && ./gradlew assemble",
     "gradle:fresh": "cd android && ./gradlew clean assemble",
-    "gradle:release": "cd android && ./gradlew bundleRelease"
+    "gradle:release": "cd android && ./gradlew bundleRelease",
+    "start:nocache": "npx react-native start --reset-cache"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.19.3",

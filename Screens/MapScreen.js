@@ -5,7 +5,7 @@ import {Marker, Callout} from 'react-native-maps';
 import {Text} from '@rneui/base';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
-import { styles } from '../Helpers/AppStyles'; // Adjust the import path
+import { styles } from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants'
 import {database} from '../Helpers/Database';
 
@@ -140,21 +140,7 @@ export default class MapScreen extends React.Component {
 
     };
     insertIntoLocationDataVariable = (row) => {
-        this.state.locationData.push({
-            id: row.id,
-            name: row.name,
-            latitude: row.latitude,
-            longitude: row.longitude,
-            description: row.description,
-            website: row.website,
-            category_id: row.category_id,
-            points: row.points,
-            user_id: row.user_id,
-            created_at: row.created_at,
-            updated_at: row.updated_at,
-        });
-
-
+        this.state.locationData.push(row);
     };
     insertIntoLocationsTable = (data) => {
         db.transaction(txn => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View,StyleSheet, Image, Text} from 'react-native';
 
-export default class Location extends React.Component {
+export default class LocationScreen extends React.Component {
 
     constructor(props) {
         super(props);

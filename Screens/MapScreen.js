@@ -8,19 +8,12 @@ import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 // noinspection ES6CheckImport
 import {openDatabase} from 'react-native-sqlite-storage';
-
+import { styles } from '../Helpers/AppStyles'; // Adjust the import path
 // Constants
-const dbName = 'vetus';
-const initialLat = 6.8523;
-const initialLong = 79.8895;
-const initialLatDelta = 0.01;
-const initialLongDelta = 0.007;
-const apiUrl = 'https://2295a967-bf39-4526-948c-169b249616fd.mock.pstmn.io/api/locations';
-const minZoomLevelValue = 16;
-const maxZoomLevelValue = 20;
+import * as constants from '../Helpers/Constants'
 
 const db = openDatabase({
-    name: dbName,
+    name: constants.dbName,
     location: 'default',
 }, () => {
     console.log('ok shod');
@@ -29,14 +22,14 @@ const db = openDatabase({
     console.log(error);
 });
 
-export default class Map extends React.Component {
+export default class MapScreen extends React.Component {
 
     // Constructor
     constructor(props) {
         super(props);
         this.state = {
-            latitude: initialLat,
-            longitude: initialLong,
+            latitude: constants.initialLat,
+            longitude: constants.initialLong,
             markers: [],
             locationData: [],
             selectMarker: null,
@@ -71,7 +64,7 @@ export default class Map extends React.Component {
     callApiToUpdateMap = () => {
         console.log('calling api....');
 
-        axios.get(apiUrl)
+        axios.get(constants.apiUrl)
             .then((response) => {
                 const mapResponseData = response.data.data;
                 if (Array.isArray(mapResponseData)) {
@@ -196,8 +189,8 @@ export default class Map extends React.Component {
             this.mapRef.animateToRegion({
                 latitude: loc.coords.latitude,
                 longitude: loc.coords.longitude,
-                latitudeDelta: initialLatDelta,
-                longitudeDelta: initialLongDelta,
+                latitudeDelta: constants.initialLatDelta,
+                longitudeDelta: constants.initialLongDelta,
             });
             this.setState({
                 latitude: loc.coords.latitude,
@@ -260,13 +253,13 @@ export default class Map extends React.Component {
                              this.mapRef = ref;
                          }}
                          initialRegion={{
-                             latitude: initialLat,
-                             longitude: initialLong,
-                             latitudeDelta: initialLatDelta,
-                             longitudeDelta: initialLongDelta,
+                             latitude: constants.initialLat,
+                             longitude: constants.initialLong,
+                             latitudeDelta: constants.initialLatDelta,
+                             longitudeDelta: constants.initialLongDelta,
                          }}
-                         minZoomLevel={minZoomLevelValue}
-                         maxZoomLevel={maxZoomLevelValue}
+                         minZoomLevel={constants.minZoomLevelValue}
+                         maxZoomLevel={constants.maxZoomLevelValue}
                          onRegionChangeComplete={this.handleRegionChangeComplete} // Add this line
                 >
                     {
@@ -309,18 +302,15 @@ export default class Map extends React.Component {
                 {this.state.loading ? (
                     // Show a loading indicator (e.g., a spinner)
                     <View style={styles.bottomTextContainer}>
-                        <Text style={[styles.bottomText, styles.bottomTextInfo]}>Fetching the fresh data ....</Text>
+                        <Text style={[styles.bottomText, styles.bottomTextInfo]}>{constants.msgFetchingFreshData}</Text>
                     </View>
                 ) : (
-                    // Show a small text at the bottom when not loading
                     <View>
                     </View>
                 )}
                 {this.state.bottomTooFarMessage ? (
-                    // Show a loading indicator (e.g., a spinner)
                     <View style={styles.bottomTextContainer}>
-                        <Text style={[styles.bottomText, styles.bottomTextError]}>Please zoom in to show the
-                            markers!</Text>
+                        <Text style={[styles.bottomText, styles.bottomTextError]}></Text>
                     </View>
                 ) : (
                     <View>
@@ -332,68 +322,3 @@ export default class Map extends React.Component {
 
 }
 
-// Styles
-const styles = StyleSheet.create({
-    buttonContainer: {
-        position: 'absolute',
-        top: 10,
-        left: 10,
-        zIndex: 3,
-    },
-    button: {
-        backgroundColor: '#123456',
-        padding: 10,
-        borderRadius: 5,
-    },
-    sectionContainer: {
-        marginTop: 32,
-        paddingHorizontal: 24,
-    },
-    sectionTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-    },
-    sectionDescription: {
-        marginTop: 8,
-        fontSize: 18,
-        fontWeight: '400',
-    },
-    highlight: {
-        fontWeight: '700',
-    },
-    absoluteFillObject: {
-        fontSize: 12,  // Corrected type to number
-    },
-    loadingContainer: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        zIndex: 1,
-    },
-    bottomTextContainer: {
-        position: 'absolute',
-        bottom: 10,
-        left: 10,
-        right: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        zIndex: 1,
-    },
-    bottomText: {
-        fontSize: 16,
-        color: '#000000',
-        fontWeight: 'bold',
-    },
-    bottomTextInfo: {
-        color: '#0aad00',
-    },
-    bottomTextError: {
-        color: '#f80025',
-    },
-});

@@ -31,8 +31,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const Stack = createNativeStackNavigator();
 enableScreens();
 
-import Map from './Screens/Map';
-import Location from "./Screens/Location";
+import MapScreen from './Screens/MapScreen';
+import LocationScreen from "./Screens/LocationScreen";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import SettingsScreen from "./Screens/SettingsScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
@@ -43,14 +43,14 @@ function HomeStack() {
         <Stack.Navigator>
             <Stack.Screen
                 name="Map"
-                component={Map}
+                component={MapScreen}
                 options={({ navigation, route }) => ({
                     headerShown: false
                 })}
             />
             <Stack.Screen
                 name="Location"
-                component={Location}
+                component={LocationScreen}
             />
         </Stack.Navigator>
     );
@@ -94,7 +94,7 @@ function App(): JSX.Element {
 }
 // <NavigationContainer>
 //     <Tab.Navigator>
-//         <Tab.Screen name="Home" component={Map} />
+//         <Tab.Screen name="Home" component={MapScreen} />
 //         <Tab.Screen name="Settings" component={SettingsScreen} />
 //         <Tab.Screen name="Profile" component={ProfileScreen} />
 //     </Tab.Navigator>

@@ -170,7 +170,7 @@ export default class MapScreen extends React.Component {
                 )}
                 {this.state.bottomTooFarMessage ? (
                     <View style={styles.bottomTextContainer}>
-                        <Text style={[styles.bottomText, styles.bottomTextError]}></Text>
+                        <Text style={[styles.bottomText, styles.bottomTextError]}>{constants.msgZoomOutLimitReached}</Text>
                     </View>
                 ) : (
                     <View>

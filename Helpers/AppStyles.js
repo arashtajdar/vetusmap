@@ -76,13 +76,9 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  markerCallout: {
-    height: 150,
-    width: 150,
-  },
   markerCalloutView: {
-    flex: 1,
-    justifyContent: 'space-between',
+    alignItems: 'center',
+
   },
   markerCalloutImage: {
     width: 150,
@@ -95,10 +91,6 @@ export const styles = StyleSheet.create({
   locationScreenImage: {
     width: '100%',
     height: '50%',
-  },
-  mapMainRenderView: {
-    flexDirection: 'column',
-    flex: 1,
   },
   ProfileContainer: {
     flex: 1,
@@ -130,5 +122,25 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderColor: '#ccc',
+  },
+  markerCallout: {
+    width: 200,
+  },
+  popupContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 5,
+  },
+  popupTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  popupImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 5,
   },
 });

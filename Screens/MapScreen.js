@@ -9,6 +9,7 @@ import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
 import {markerImages} from '../Helpers/MarkerImages';
 import nasoniImage from '../assets/images/nasoni.jpg';
+import {btnMoreInfo} from '../Helpers/Constants';
 
 export default class MapScreen extends React.Component {
   // Constructor
@@ -162,12 +163,7 @@ export default class MapScreen extends React.Component {
                   }}>
                   <View style={styles.markerCalloutView}>
                     <Text>{marker.name}</Text>
-                    <Text>
-                      <Image
-                          style={styles.markerCalloutImage}
-                          source={nasoniImage}
-                      />
-                    </Text>
+                    <Text>{constants.btnMoreInfo}</Text>
                   </View>
                 </Callout>
               </Marker>

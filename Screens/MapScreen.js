@@ -8,6 +8,7 @@ import axios from 'axios';
 import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
 import {markerImages} from '../Helpers/MarkerImages';
+import nasoniImage from '../assets/images/nasoni.jpg';
 
 export default class MapScreen extends React.Component {
   // Constructor
@@ -162,10 +163,13 @@ export default class MapScreen extends React.Component {
                   <View style={styles.markerCalloutView}>
                     <Text>{marker.name}</Text>
                     <Text>{marker.category_id}</Text>
-                    <Image
-                      style={styles.markerCalloutImage}
-                      source={require('../assets/images/nasoni.jpg')}
-                    />
+                    <Text>
+                      <Image
+                          style={styles.markerCalloutImage}
+                          source={nasoniImage}
+                      />
+                    </Text>
+
                     <Text>Tap for more details...</Text>
                   </View>
                 </Callout>

@@ -1,5 +1,7 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Image} from 'react-native';
+import {styles} from '../Helpers/AppStyles';
+import nasoniImage from '../assets/images/nasoni.jpg';
 
 export default class LocationScreen extends React.Component {
   constructor(props) {
@@ -21,8 +23,12 @@ export default class LocationScreen extends React.Component {
   render() {
     if (this.state.thisLocation != null) {
       return (
-        <View>
+        <View style={{with:'99%',height: '99%'}}>
           <Text>{this.state.thisLocation.name}</Text>
+            <Image
+                style={styles.locationScreenImage}
+                source={nasoniImage}
+            />
         </View>
       );
     }

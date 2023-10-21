@@ -92,4 +92,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
   },
+  locationScreenImage: {
+    width: '100%',
+    height: '50%',
+  },
 });

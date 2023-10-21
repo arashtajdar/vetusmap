@@ -8,6 +8,7 @@ import axios from 'axios';
 import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
 import {markerImages} from '../Helpers/MarkerImages';
+import {maxZoomLevelValue} from '../Helpers/Constants';
 
 export default class MapScreen extends React.Component {
   // Constructor
@@ -31,8 +32,6 @@ export default class MapScreen extends React.Component {
 
   // Functions
   callApiToUpdateMap = () => {
-    console.log('calling api....');
-
     axios
       .get(constants.apiUrl)
       .then(response => {
@@ -60,12 +59,10 @@ export default class MapScreen extends React.Component {
             loading: false, // Data has been loaded
           });
         } else {
-          console.error('API response is not an array:', mapResponseData);
           this.setState({loading: false}); // Set loading to false in case of an error
         }
       })
       .catch(error => {
-        console.error('Error fetching data from the API:', error);
         this.setState({loading: false}); // Set loading to false in case of an error
       });
   };
@@ -86,7 +83,7 @@ export default class MapScreen extends React.Component {
   };
   handleRegionChangeComplete = region => {
     const {latitude, latitudeDelta, longitude, longitudeDelta} = region;
-    if (latitudeDelta * 1000 > 30) {
+    if (latitudeDelta * 1000 > constants.maxZoomLevelValue) {
       this.setState({
         bottomTooFarMessage: true, // Data has been loaded
       });
@@ -125,25 +122,16 @@ export default class MapScreen extends React.Component {
           showsUserLocation={true}
           showsMyLocationButton={true}
           showsCompass={true} // Hide compass button
-          showsBuildings={false}
-          showsPointsOfInterest={false}
           ref={ref => {
             this.mapRef = ref;
           }}
-          initialRegion={{
-            latitude: constants.initialLat,
-            longitude: constants.initialLong,
-            latitudeDelta: constants.initialLatDelta,
-            longitudeDelta: constants.initialLongDelta,
-          }}
-          minZoomLevel={constants.minZoomLevelValue}
-          maxZoomLevel={constants.maxZoomLevelValue}
-          onRegionChangeComplete={this.handleRegionChangeComplete} // Add this line
+          onRegionChangeComplete={this.handleRegionChangeComplete}
         >
           {this.state.markers.map(marker => {
             return (
               <Marker
                 key={marker.id}
+                tracksViewChanges={false}
                 coordinate={{
                   latitude: marker.latitude,
                   longitude: marker.longitude,

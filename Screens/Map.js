@@ -296,7 +296,7 @@ export default class Map extends React.Component {
         return (
             <View style={{height: '100%', paddingTop: 45, backgroundColor: '#123456'}}>
                 <MapView style={{...StyleSheet.absoluteFillObject}}
-                         provider={'google'}
+                         provider={PROVIDER_GOOGLE}
                          onMapReady={() => {
                              this.getMyLocation();
                          }}

@@ -8,7 +8,6 @@ import axios from 'axios';
 import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
 import {markerImages} from '../Helpers/MarkerImages';
-import {maxZoomLevelValue} from '../Helpers/Constants';
 
 export default class MapScreen extends React.Component {
   // Constructor
@@ -125,8 +124,7 @@ export default class MapScreen extends React.Component {
           ref={ref => {
             this.mapRef = ref;
           }}
-          onRegionChangeComplete={this.handleRegionChangeComplete}
-        >
+          onRegionChangeComplete={this.handleRegionChangeComplete}>
           {this.state.markers.map(marker => {
             return (
               <Marker

@@ -8,8 +8,17 @@ import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import {openDatabase} from 'react-native-sqlite-storage';
 
+// Constants
+const dbName = 'vetus';
+const initialLat = 6.8523;
+const initialLong = 79.8895;
+const initialLatDelta = 0.01;
+const initialLongDelta = 0.007;
+const apiUrl = 'https://2295a967-bf39-4526-948c-169b249616fd.mock.pstmn.io/api/locations';
+const minZoomLevelValue = 16;
+const maxZoomLevelValue = 20;
 const db = openDatabase({
-    name: 'vetus',
+    name: dbName,
     location: 'default',
 }, () => {
     console.log('ok shod');
@@ -24,14 +33,11 @@ export default class Map extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            latitude: 24.723456,
-            longitude: 46.70095,
+            latitude: initialLat,
+            longitude: initialLong,
             markers: [],
             locationData: [],
-            searchString: '',
-            distance: 40,
             selectMarker: null,
-            showSearchSection: false, // Add this state for showing/hiding the search section
             loading: true, // Initialize as loading
             bottomTooFarMessage: false, // Initialize as loading
         };
@@ -63,12 +69,11 @@ export default class Map extends React.Component {
     callApiToUpdateMap = () => {
         console.log('calling api....');
 
-        axios.get('https://2295a967-bf39-4526-948c-169b249616fd.mock.pstmn.io/api/locations')
+        axios.get(apiUrl)
             .then((response) => {
                 const mapResponseData = response.data.data;
                 if (Array.isArray(mapResponseData)) {
                     this.state.locationData = mapResponseData;
-                    //
                     db.transaction(txn => {
                         txn.executeSql(
                             `drop table if exists locations; `,
@@ -189,8 +194,8 @@ export default class Map extends React.Component {
             this.mapRef.animateToRegion({
                 latitude: loc.coords.latitude,
                 longitude: loc.coords.longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.007,
+                latitudeDelta: initialLatDelta,
+                longitudeDelta: initialLongDelta,
             });
             this.setState({
                 latitude: loc.coords.latitude,
@@ -231,59 +236,6 @@ export default class Map extends React.Component {
         }
 
     };
-
-    searchSection = () => {
-        const handleSearchLocationsNames = () => {
-            let filteredLocations = mapResponse.data.filter(g => g.name.toLowerCase().includes(this.state.searchString.toLowerCase()));
-            this.setState({
-                markers: filteredLocations,
-            });
-        };
-        const handleReset = () => {
-            this.setState({
-                markers: mapResponse.data,
-            });
-        };
-
-        return (
-            <View style={{position: 'absolute', backgroundColor: '#123456', zIndex: 2}}>
-                <Text style={{color: 'white', fontSize: 28, textAlign: 'center'}}>
-                    Vetus Map
-                </Text>
-                <SearchBar
-                    placeholder={'Search ...'}
-                    ref={search => this.search = search}
-                    onChangeText={(text) => {
-                        this.setState({searchString: text});
-                    }}
-                    value={this.state.searchString}
-                    lightTheme={true}
-                    round={true}
-                    containerStyle={{backgroundColor: 'biege'}}
-                />
-                <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-                    <Button
-                        onPress={() => {
-                            handleReset();
-                        }}
-                        containerStyle={{width: '49%', borderRadius: 5, marginHorizontal: 2}}
-                    >
-                        <Text style={{fontWeight: 'bold', color: 'white', fontSize: 20, marginTop: 5}}>RESET</Text>
-                        <Icon name="refresh" color="white"></Icon>
-                    </Button>
-                    <Button
-                        onPress={() => {
-                            handleSearchLocationsNames();
-                        }}
-                        containerStyle={{width: '49%', borderRadius: 5, marginHorizontal: 2}}
-                    >
-                        <Text style={{fontWeight: 'bold', color: 'white', fontSize: 20, marginTop: 5}}>SEARCH</Text>
-                        <Icon name="search" color="white"></Icon>
-                    </Button>
-                </View>
-            </View>
-        );
-    };
     mapSection = () => {
         const selectLocation = (location) => {
             this.props.navigation.navigate(
@@ -306,13 +258,13 @@ export default class Map extends React.Component {
                              this.mapRef = ref;
                          }}
                          initialRegion={{
-                             latitude: 6.8523,
-                             longitude: 79.8895,
-                             latitudeDelta: 0.0922,
-                             longitudeDelta: 0.0421,
+                             latitude: initialLat,
+                             longitude: initialLong,
+                             latitudeDelta: initialLatDelta,
+                             longitudeDelta: initialLongDelta,
                          }}
-                         minZoomLevel={16}
-                         maxZoomLevel={20}
+                         minZoomLevel={minZoomLevelValue}
+                         maxZoomLevel={maxZoomLevelValue}
                          onRegionChangeComplete={this.handleRegionChangeComplete} // Add this line
                 >
                     {
@@ -343,24 +295,11 @@ export default class Map extends React.Component {
             </View>
         );
     };
-    toggleSearchSection = () => {
-        this.setState((prevState) => ({
-            showSearchSection: !prevState.showSearchSection,
-        }));
-    };
 
     // Main render part
     render() {
         return (
             <View style={{flexDirection: 'column', flex: 1}}>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={this.toggleSearchSection} style={styles.button}>
-                        <Icon name="search" color="white" size={30}/>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    {this.state.showSearchSection && this.searchSection()}
-                </View>
                 <View>
                     {this.mapSection()}
                 </View>
@@ -385,7 +324,6 @@ export default class Map extends React.Component {
                     <View>
                     </View>
                 )}
-
             </View>
         );
     }

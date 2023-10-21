@@ -7,9 +7,6 @@ import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { styles } from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants'
-import {database} from '../Helpers/Database';
-
-const db = database;
 
 export default class MapScreen extends React.Component {
 
@@ -29,23 +26,7 @@ export default class MapScreen extends React.Component {
 
     // component actions
     componentDidMount = () => {
-        db.transaction(txn => {
-            txn.executeSql(
-                `SELECT *
-                 from locations`,
-                [],
-                (sqlTxn, res) => {
-                    if (res.rows.length) {
-                        this.updateMapFromDb();
-                    } else {
-                        this.callApiToUpdateMap();
-                    }
-                },
-                () => {
-                    this.callApiToUpdateMap();
-                },
-            );
-        });
+        this.callApiToUpdateMap();
     };
 
 
@@ -58,48 +39,6 @@ export default class MapScreen extends React.Component {
                 const mapResponseData = response.data.data;
                 if (Array.isArray(mapResponseData)) {
                     this.state.locationData = mapResponseData;
-                    db.transaction(txn => {
-                        txn.executeSql(
-                            `drop table if exists locations; `,
-                            [],
-                            () => {
-                                console.log('dropped ! ok');
-                                db.transaction(txn => {
-                                    txn.executeSql(
-                                        `create table if not exists locations
-                                         (
-                                             id          bigint unsigned auto_increment
-                                                 primary key,
-                                             name        varchar(255)    not null,
-                                             latitude    decimal(10, 8)  not null,
-                                             longitude   decimal(11, 8)  not null,
-                                             description text            null,
-                                             website     varchar(255)    null,
-                                             category_id bigint unsigned not null,
-                                             points      int default 0 not null,
-                                             user_id     bigint unsigned null,
-                                             created_at  timestamp       null,
-                                             updated_at  timestamp       null
-                                         )`,
-                                        [],
-                                        () => {
-                                            console.log('successful');
-                                            mapResponseData.map((data) => {
-                                                this.insertIntoLocationsTable(data);
-                                            });
-                                        },
-                                        error => {
-                                            console.log('error on query : ' + error.message);
-                                        },
-                                    );
-                                });
-
-                            },
-                            error => {
-                                console.log('error on getting settings : ' + error.message);
-                            },
-                        );
-                    });
                     this.setState({
                         loading: false, // Data has been loaded
                     });
@@ -114,51 +53,6 @@ export default class MapScreen extends React.Component {
             });
     };
 
-    updateMapFromDb = () => {
-        console.log('no need to api call');
-
-        db.transaction(txn => {
-            txn.executeSql(
-                `SELECT *
-                 from locations`,
-                [],
-                (sqlTxn, res) => {
-                    for (let i = 0; i < res.rows.length; i++) {
-                        const row = res.rows.item(i);
-                        this.insertIntoLocationDataVariable(row);
-                    }
-                    this.setState({loading: false}); // Set loading to false in case of an error
-
-                },
-                error => {
-                    console.log('error on getting  : ' + error.message);
-                    this.setState({loading: false}); // Set loading to false in case of an error
-
-                },
-            );
-        });
-
-    };
-    insertIntoLocationDataVariable = (row) => {
-        this.state.locationData.push(row);
-    };
-    insertIntoLocationsTable = (data) => {
-        db.transaction(txn => {
-            txn.executeSql(
-                `INSERT INTO locations (id, name, latitude, longitude, description, website, category_id, points,
-                                        user_id,
-                                        created_at, updated_at)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
-                Object.values(data),
-                () => {
-                    // console.log('insert successful');
-                },
-                error => {
-                    console.log('error on inserting locations into sqlite : ' + error.message);
-                },
-            );
-        });
-    };
     getMyLocation = () => {
         Geolocation.getCurrentPosition(loc => {
             this.mapRef.animateToRegion({
@@ -171,17 +65,9 @@ export default class MapScreen extends React.Component {
                 latitude: loc.coords.latitude,
                 longitude: loc.coords.longitude,
             });
-
-
         });
     };
     handleRegionChangeComplete = (region) => {
-
-
-        // You can access the visible region data from the 'region' object.
-        // console.log('Visible Region Data:', region);
-        // You can store it in the state or perform any other actions as needed.
-
         const {latitude, latitudeDelta, longitude, longitudeDelta} = region;
         if (latitudeDelta * 1000 > 30) {
             this.setState({
@@ -199,7 +85,6 @@ export default class MapScreen extends React.Component {
                     marker.longitude <= longitude + longitudeDelta / 2
                 );
             });
-
             this.setState({
                 markers: filteredLocations,
             });
@@ -294,6 +179,5 @@ export default class MapScreen extends React.Component {
             </View>
         );
     }
-
 }
 

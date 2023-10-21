@@ -109,7 +109,7 @@ export default class MapScreen extends React.Component {
             this.props.navigation.navigate(
                 'Location',
                 {
-                    locationId: location.id,
+                    selectedLocation: location,
                 },
             );
         };

@@ -3,7 +3,7 @@ import {Button, View} from 'react-native';
 import {Text} from '@rneui/base';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Config from "react-native-config";
+import Config from 'react-native-config';
 
 export default class ProfileScreen extends React.Component {
     constructor(props) {

@@ -4,12 +4,12 @@ import {Text} from '@rneui/base';
 
 export default class SettingsScreen extends React.Component {
     render() {
-        return(
+        return (
             <View>
                 <Text>
                     Settings view
                 </Text>
             </View>
-        )
+        );
     }
 }

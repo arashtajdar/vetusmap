@@ -1,90 +1,102 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    useColorScheme,
-    View,
-} from 'react-native';
-
-import {
-    Colors,
-    DebugInstructions,
-    Header,
-    LearnMoreLinks,
-    ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import {NavigationContainer} from "@react-navigation/native";
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {enableScreens} from 'react-native-screens';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const Stack = createNativeStackNavigator();
 enableScreens();
 
 import MapScreen from './Screens/MapScreen';
-import LocationScreen from "./Screens/LocationScreen";
-import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import SettingsScreen from "./Screens/SettingsScreen";
-import ProfileScreen from "./Screens/ProfileScreen";
+import LocationScreen from './Screens/LocationScreen';
+import SettingsScreen from './Screens/SettingsScreen';
+import ProfileScreen from './Screens/ProfileScreen';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
 const Tab = createBottomTabNavigator();
 
 function HomeStack() {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="Map"
+                name={'MapStack'}
                 component={MapScreen}
-                options={({ navigation, route }) => ({
-                    headerShown: false
+                options={({}) => ({
+                    headerShown: false,
                 })}
             />
             <Stack.Screen
-                name="Location"
+                name={'Location'}
                 component={LocationScreen}
             />
         </Stack.Navigator>
     );
 }
+function SettingsStack() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen
+                name={'SettingsStack'}
+                component={SettingsScreen}
+                options={({}) => ({
+                    headerShown: false,
+                })}
+            />
+        </Stack.Navigator>
+    );
+}
 
-function App(): JSX.Element {
+function ProfileStack() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen
+                name={'ProfileStack'}
+                component={ProfileScreen}
+                options={({}) => ({
+                    headerShown: false,
+                })}
+            />
+        </Stack.Navigator>
+    );
+}
+function App(): React.ReactElement {
     return (
         <NavigationContainer>
-            <Tab.Navigator      initialRouteName="Profile"
-                                screenOptions={{
-                                    tabBarActiveTintColor: '#e91e63',
-                                    headerShown: false
-                                }}
+            <Tab.Navigator initialRouteName={'Home'}
+                           screenOptions={{
+                               tabBarActiveTintColor: '#e91e63',
+                               headerShown: false,
+                           }}
             >
+
                 <Tab.Screen
-                    name="Home"
-                    component={HomeStack}
+                    name={'Settings'}
+                    component={SettingsStack}
                     options={{
-                        tabBarLabel: 'Home',
-                        tabBarIcon: ({ color, size }) => (
-                            <MaterialCommunityIcons name="home" color={color} size={size} />
+                        tabBarLabel: 'Settings',
+                        tabBarIcon: ({color, size}) => (
+                            <MaterialCommunityIcons name={'gamepad-circle-outline'} color={color} size={size}/>
                         ),
                     }}
                 />
-                <Tab.Screen name="Settings" component={SettingsScreen}                     options={{
-                    tabBarLabel: 'Settings',
-                    tabBarIcon: ({ color, size }) => (
-                        <MaterialCommunityIcons name="gamepad-circle-outline" color={color} size={size} />
-                    ),
-                }}/>
-                <Tab.Screen name="Profile" component={ProfileScreen}                     options={{
+                <Tab.Screen
+                    name={'Home'}
+                    component={HomeStack}
+                    options={{
+                        tabBarLabel: 'Home',
+                        tabBarIcon: ({color, size}) => (
+                            <MaterialCommunityIcons name={'home-map-marker'} color={color} size={size}/>
+                        ),
+                    }}
+                />
+
+                <Tab.Screen
+                    name={'Profile'}
+                    component={ProfileStack}
+                    options={{
                     tabBarLabel: 'Profile',
-                    tabBarIcon: ({ color, size }) => (
-                        <MaterialCommunityIcons name="account" color={color} size={size} />
+                    tabBarIcon: ({color, size}) => (
+                        <MaterialCommunityIcons name={'account'} color={color} size={size}/>
                     ),
                 }}/>
             </Tab.Navigator>
@@ -92,31 +104,5 @@ function App(): JSX.Element {
     );
 
 }
-// <NavigationContainer>
-//     <Tab.Navigator>
-//         <Tab.Screen name="Home" component={MapScreen} />
-//         <Tab.Screen name="Settings" component={SettingsScreen} />
-//         <Tab.Screen name="Profile" component={ProfileScreen} />
-//     </Tab.Navigator>
-//
-// </NavigationContainer>
-const styles = StyleSheet.create({
-    sectionContainer: {
-        marginTop: 32,
-        paddingHorizontal: 24,
-    },
-    sectionTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-    },
-    sectionDescription: {
-        marginTop: 8,
-        fontSize: 18,
-        fontWeight: '400',
-    },
-    highlight: {
-        fontWeight: '700',
-    },
-});
 
 export default App;

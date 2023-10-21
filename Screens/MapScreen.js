@@ -162,15 +162,12 @@ export default class MapScreen extends React.Component {
                   }}>
                   <View style={styles.markerCalloutView}>
                     <Text>{marker.name}</Text>
-                    <Text>{marker.category_id}</Text>
                     <Text>
                       <Image
                           style={styles.markerCalloutImage}
                           source={nasoniImage}
                       />
                     </Text>
-
-                    <Text>Tap for more details...</Text>
                   </View>
                 </Callout>
               </Marker>

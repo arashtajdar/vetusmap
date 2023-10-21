@@ -16,94 +16,102 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
 function HomeStack() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen
-                name={'MapStack'}
-                component={MapScreen}
-                options={({}) => ({
-                    headerShown: false,
-                })}
-            />
-            <Stack.Screen
-                name={'Location'}
-                component={LocationScreen}
-            />
-        </Stack.Navigator>
-    );
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name={'MapStack'}
+        component={MapScreen}
+        options={({}) => ({
+          headerShown: false,
+        })}
+      />
+      <Stack.Screen name={'Location'} component={LocationScreen} />
+    </Stack.Navigator>
+  );
 }
 function SettingsStack() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen
-                name={'SettingsStack'}
-                component={SettingsScreen}
-                options={({}) => ({
-                    headerShown: false,
-                })}
-            />
-        </Stack.Navigator>
-    );
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name={'SettingsStack'}
+        component={SettingsScreen}
+        options={({}) => ({
+          headerShown: false,
+        })}
+      />
+    </Stack.Navigator>
+  );
 }
 
 function ProfileStack() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen
-                name={'ProfileStack'}
-                component={ProfileScreen}
-                options={({}) => ({
-                    headerShown: false,
-                })}
-            />
-        </Stack.Navigator>
-    );
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name={'ProfileStack'}
+        component={ProfileScreen}
+        options={({}) => ({
+          headerShown: false,
+        })}
+      />
+    </Stack.Navigator>
+  );
 }
 /* eslint-disable react/no-unstable-nested-components */
 function App(): React.ReactElement {
-    return (
-        <NavigationContainer>
-            <Tab.Navigator initialRouteName={'Home'}
-                           screenOptions={{
-                               tabBarActiveTintColor: '#e91e63',
-                               headerShown: false,
-                           }}
-            >
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        initialRouteName={'Home'}
+        screenOptions={{
+          tabBarActiveTintColor: '#e91e63',
+          headerShown: false,
+        }}>
+        <Tab.Screen
+          name={'Settings'}
+          component={SettingsStack}
+          options={{
+            tabBarLabel: 'Settings',
+            tabBarIcon: ({color, size}) => (
+              <MaterialCommunityIcons
+                name={'gamepad-circle-outline'}
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name={'Home'}
+          component={HomeStack}
+          options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: ({color, size}) => (
+              <MaterialCommunityIcons
+                name={'home-map-marker'}
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
 
-                <Tab.Screen
-                    name={'Settings'}
-                    component={SettingsStack}
-                    options={{
-                        tabBarLabel: 'Settings',
-                        tabBarIcon: ({color, size}) => (
-                            <MaterialCommunityIcons name={'gamepad-circle-outline'} color={color} size={size}/>
-                        ),
-                    }}
-                />
-                <Tab.Screen
-                    name={'Home'}
-                    component={HomeStack}
-                    options={{
-                        tabBarLabel: 'Home',
-                        tabBarIcon: ({color, size}) => (
-                            <MaterialCommunityIcons name={'home-map-marker'} color={color} size={size}/>
-                        ),
-                    }}
-                />
-
-                <Tab.Screen
-                    name={'Profile'}
-                    component={ProfileStack}
-                    options={{
-                    tabBarLabel: 'Profile',
-                    tabBarIcon: ({color, size}) => (
-                        <MaterialCommunityIcons name={'account'} color={color} size={size}/>
-                    ),
-                }}/>
-            </Tab.Navigator>
-        </NavigationContainer>
-    );
-
+        <Tab.Screen
+          name={'Profile'}
+          component={ProfileStack}
+          options={{
+            tabBarLabel: 'Profile',
+            tabBarIcon: ({color, size}) => (
+              <MaterialCommunityIcons
+                name={'account'}
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
 }
 
 export default App;

@@ -14,7 +14,7 @@ const db = openDatabase({
 }, () => {
     console.log('ok shod');
 }, (error) => {
-    console.log('rid');
+    console.log('db rid');
     console.log(error);
 });
 
@@ -39,112 +39,116 @@ export default class Map extends React.Component {
 
     // component actions
     componentDidMount = () => {
-        if (this.mapNeedsUpdate()) {
-            axios.get('https://2295a967-bf39-4526-948c-169b249616fd.mock.pstmn.io/api/locations')
-                .then((response) => {
-                    const mapResponseData = response.data.data;
-                    if (Array.isArray(mapResponseData)) {
-                        this.state.locationData = mapResponseData;
-                        //
-                        db.transaction(txn => {
-                            txn.executeSql(
-                                `drop table if exists locations; `,
-                                [],
-                                (sqlTxn, res) => {
-                                    console.log('dropped ! ok');
-                                    db.transaction(txn => {
-                                        txn.executeSql(
-                                            `create table if not exists locations
-                                 (
-                                     id          bigint unsigned auto_increment
-                                         primary key,
-                                     name        varchar(255)    not null,
-                                     latitude    decimal(10, 8)  not null,
-                                     longitude   decimal(11, 8)  not null,
-                                     description text            null,
-                                     website     varchar(255)    null,
-                                     category_id bigint unsigned not null,
-                                     points      int default 0 not null,
-                                     user_id     bigint unsigned null,
-                                     created_at  timestamp       null,
-                                     updated_at  timestamp       null
-                                 )`,
-                                            [],
-                                            (sqlTxn, res) => {
-                                                console.log('succesful');
-                                                mapResponseData.map((data) => {
-                                                    console.log(data.name);
-                                                    this.insertIntoLocationsTable(data);
-                                                });
-                                            },
-                                            error => {
-                                                console.log('error on query : ' + error.message);
-                                            },
-                                        );
-                                    });
-
-                                },
-                                error => {
-                                    console.log("error on getting settings : " + error.message);
-                                },
-                            );
-                        });
-                        this.setState({
-                            loading: false, // Data has been loaded
-                        });
+        db.transaction(txn => {
+            txn.executeSql(
+                `SELECT *
+                 from locations`,
+                [],
+                (sqlTxn, res) => {
+                    if (res.rows.length) {
+                        this.updateMapFromDb();
                     } else {
-                        console.error('API response is not an array:', mapResponseData);
-                        this.setState({loading: false}); // Set loading to false in case of an error
+                        this.callApiToUpdateMap();
                     }
-                })
-                .catch((error) => {
-                    console.error('Error fetching data from the API:', error);
-                    this.setState({loading: false}); // Set loading to false in case of an error
-                });
-        } else {
-            db.transaction(txn => {
-                txn.executeSql(
-                    `SELECT *
-                     from locations`,
-                    [],
-                    (sqlTxn, res) => {
-                        console.log(res.rows.length);
-                        for (let i = 0; i < res.rows.length; i++) {
-                            const row = res.rows.item(i);
-                            console.log(row);
-                            if (row) {
-                                this.state.locationData.push({
-                                    id: row.id,
-                                    name: row.name,
-                                    latitude: row.latitude,
-                                    longitude: row.longitude,
-                                    description: row.description,
-                                    website: row.website,
-                                    category_id: row.category_id,
-                                    points: row.points,
-                                    user_id: row.user_id,
-                                    created_at: row.created_at,
-                                    updated_at: row.updated_at,
-                                });
-                            }
-                        }
-                    },
-                    error => {
-                        console.log('error on getting  : ' + error.message);
-                    },
-                );
-            });
-
-
-            this.setState({loading: false}); // Set loading to false in case of an error
-
-        }
+                },
+                error => {
+                    this.callApiToUpdateMap();
+                },
+            );
+        });
     };
 
 
     // Functions
-    mapNeedsUpdate = () => {
-        return false;
+    callApiToUpdateMap = () => {
+        console.log('calling api....');
+
+        axios.get('https://2295a967-bf39-4526-948c-169b249616fd.mock.pstmn.io/api/locations')
+            .then((response) => {
+                const mapResponseData = response.data.data;
+                if (Array.isArray(mapResponseData)) {
+                    this.state.locationData = mapResponseData;
+                    //
+                    db.transaction(txn => {
+                        txn.executeSql(
+                            `drop table if exists locations; `,
+                            [],
+                            (sqlTxn, res) => {
+                                console.log('dropped ! ok');
+                                db.transaction(txn => {
+                                    txn.executeSql(
+                                        `create table if not exists locations
+                                         (
+                                             id          bigint unsigned auto_increment
+                                                 primary key,
+                                             name        varchar(255)    not null,
+                                             latitude    decimal(10, 8)  not null,
+                                             longitude   decimal(11, 8)  not null,
+                                             description text            null,
+                                             website     varchar(255)    null,
+                                             category_id bigint unsigned not null,
+                                             points      int default 0 not null,
+                                             user_id     bigint unsigned null,
+                                             created_at  timestamp       null,
+                                             updated_at  timestamp       null
+                                         )`,
+                                        [],
+                                        (sqlTxn, res) => {
+                                            console.log('succesful');
+                                            mapResponseData.map((data) => {
+                                                this.insertIntoLocationsTable(data);
+                                            });
+                                        },
+                                        error => {
+                                            console.log('error on query : ' + error.message);
+                                        },
+                                    );
+                                });
+
+                            },
+                            error => {
+                                console.log('error on getting settings : ' + error.message);
+                            },
+                        );
+                    });
+                    this.setState({
+                        loading: false, // Data has been loaded
+                    });
+                } else {
+                    console.error('API response is not an array:', mapResponseData);
+                    this.setState({loading: false}); // Set loading to false in case of an error
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching data from the API:', error);
+                this.setState({loading: false}); // Set loading to false in case of an error
+            });
+    };
+
+    updateMapFromDb = () => {
+        console.log('no need to api call');
+
+        db.transaction(txn => {
+            txn.executeSql(
+                `SELECT *
+                 from locations`,
+                [],
+                (sqlTxn, res) => {
+                    for (let i = 0; i < res.rows.length; i++) {
+                        const row = res.rows.item(i);
+                        this.insertIntoLocationDataVariable(row);
+                    }
+                    this.setState({loading: false}); // Set loading to false in case of an error
+
+                },
+                error => {
+                    console.log('error on getting  : ' + error.message);
+                    this.setState({loading: false}); // Set loading to false in case of an error
+
+                },
+            );
+        });
+
     };
     insertIntoLocationDataVariable = (row) => {
         this.state.locationData.push({
@@ -162,7 +166,7 @@ export default class Map extends React.Component {
         });
 
 
-    }
+    };
     insertIntoLocationsTable = (data) => {
         db.transaction(txn => {
             txn.executeSql(
@@ -172,7 +176,7 @@ export default class Map extends React.Component {
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                 Object.values(data),
                 (sqlTxn, res) => {
-                    console.log('insert successful');
+                    // console.log('insert successful');
                 },
                 error => {
                     console.log('error on inserting locations into sqlite : ' + error.message);
@@ -200,7 +204,7 @@ export default class Map extends React.Component {
 
 
         // You can access the visible region data from the 'region' object.
-        console.log('Visible Region Data:', region);
+        // console.log('Visible Region Data:', region);
         // You can store it in the state or perform any other actions as needed.
 
         const {latitude, latitudeDelta, longitude, longitudeDelta} = region;

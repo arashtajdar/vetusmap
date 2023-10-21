@@ -117,6 +117,7 @@ export default class MapScreen extends React.Component {
         return (
             <View style={{height: '100%', paddingTop: 45, backgroundColor: '#123456'}}>
                 <MapView style={{...StyleSheet.absoluteFillObject}}
+                         customMapStyle={mapStyle}
                          provider={PROVIDER_GOOGLE}
                          onMapReady={() => {
                              this.getMyLocation();
@@ -202,4 +203,39 @@ export default class MapScreen extends React.Component {
         );
     }
 }
-
+const mapStyle = [
+    {
+        "featureType": "administrative",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    }
+];

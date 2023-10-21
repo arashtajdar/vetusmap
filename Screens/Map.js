@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, StyleSheet, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 // import MapView from "react-native-map-clustering";
 import {Marker, Callout} from 'react-native-maps';
-import {Text, Icon, SearchBar, Button} from '@rneui/base';
+import {Text} from '@rneui/base';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
+// noinspection ES6CheckImport
 import {openDatabase} from 'react-native-sqlite-storage';
 
 // Constants
@@ -17,6 +18,7 @@ const initialLongDelta = 0.007;
 const apiUrl = 'https://2295a967-bf39-4526-948c-169b249616fd.mock.pstmn.io/api/locations';
 const minZoomLevelValue = 16;
 const maxZoomLevelValue = 20;
+
 const db = openDatabase({
     name: dbName,
     location: 'default',
@@ -57,7 +59,7 @@ export default class Map extends React.Component {
                         this.callApiToUpdateMap();
                     }
                 },
-                error => {
+                () => {
                     this.callApiToUpdateMap();
                 },
             );
@@ -78,7 +80,7 @@ export default class Map extends React.Component {
                         txn.executeSql(
                             `drop table if exists locations; `,
                             [],
-                            (sqlTxn, res) => {
+                            () => {
                                 console.log('dropped ! ok');
                                 db.transaction(txn => {
                                     txn.executeSql(
@@ -98,8 +100,8 @@ export default class Map extends React.Component {
                                              updated_at  timestamp       null
                                          )`,
                                         [],
-                                        (sqlTxn, res) => {
-                                            console.log('succesful');
+                                        () => {
+                                            console.log('successful');
                                             mapResponseData.map((data) => {
                                                 this.insertIntoLocationsTable(data);
                                             });
@@ -180,7 +182,7 @@ export default class Map extends React.Component {
                                         created_at, updated_at)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                 Object.values(data),
-                (sqlTxn, res) => {
+                () => {
                     // console.log('insert successful');
                 },
                 error => {
@@ -360,7 +362,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     absoluteFillObject: {
-        fontSize: '12px',
+        fontSize: 12,  // Corrected type to number
     },
     loadingContainer: {
         position: 'absolute',
@@ -370,30 +372,28 @@ const styles = StyleSheet.create({
         right: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)', // A semi-transparent background
-        zIndex: 1, // Place the loading indicator above the map
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        zIndex: 1,
     },
-
     bottomTextContainer: {
         position: 'absolute',
-        bottom: 10, // Adjust this value to position the text as needed
+        bottom: 10,
         left: 10,
         right: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)', // A semi-transparent background
-        zIndex: 1, // Place the text above the map
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        zIndex: 1,
     },
-
     bottomText: {
         fontSize: 16,
-        color: '#000000', // Adjust the color to your preference
+        color: '#000000',
         fontWeight: 'bold',
     },
     bottomTextInfo: {
-        color: '#0aad00', // Adjust the color to your preference
+        color: '#0aad00',
     },
     bottomTextError: {
-        color: '#f80025', // Adjust the color to your preference
+        color: '#f80025',
     },
 });

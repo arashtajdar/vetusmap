@@ -5,8 +5,9 @@ import {Marker, Callout} from 'react-native-maps';
 import {Text} from '@rneui/base';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
-import { styles } from '../Helpers/AppStyles';
-import * as constants from '../Helpers/Constants'
+import {styles} from '../Helpers/AppStyles';
+import * as constants from '../Helpers/Constants';
+import {markerImages} from '../Helpers/MarkerImages';
 
 export default class MapScreen extends React.Component {
 
@@ -122,6 +123,9 @@ export default class MapScreen extends React.Component {
                          }}
                          showsUserLocation={true}
                          showsMyLocationButton={true}
+                         showsCompass={true} // Hide compass button
+                         showsBuildings={false}
+                         showsPointsOfInterest={false}
                          ref={(ref) => {
                              this.mapRef = ref;
                          }}
@@ -141,9 +145,13 @@ export default class MapScreen extends React.Component {
                                 <Marker
                                     key={marker.id}
                                     coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
-                                    image={require('../assets/images/markers/marker_1.png')}
-
                                 >
+                                    <View style={{width: 30, height: 30}}>
+                                        <Image
+                                            source={markerImages[marker.category_id]}
+                                            style={{width: '100%', height: '100%'}}
+                                        />
+                                    </View>
                                     <Callout style={{height: 150, width: 150}} onPress={() => {
                                         selectLocation(marker);
                                     }}>
@@ -183,7 +191,8 @@ export default class MapScreen extends React.Component {
                 )}
                 {this.state.bottomTooFarMessage ? (
                     <View style={styles.bottomTextContainer}>
-                        <Text style={[styles.bottomText, styles.bottomTextError]}>{constants.msgZoomOutLimitReached}</Text>
+                        <Text
+                            style={[styles.bottomText, styles.bottomTextError]}>{constants.msgZoomOutLimitReached}</Text>
                     </View>
                 ) : (
                     <View>

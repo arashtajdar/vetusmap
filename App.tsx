@@ -59,6 +59,7 @@ function ProfileStack() {
         </Stack.Navigator>
     );
 }
+/* eslint-disable react/no-unstable-nested-components */
 function App(): React.ReactElement {
     return (
         <NavigationContainer>

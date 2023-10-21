@@ -96,4 +96,39 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '50%',
   },
+  mapMainRenderView: {
+    flexDirection: 'column',
+    flex: 1,
+  },
+  ProfileContainer: {
+    flex: 1,
+    padding: 16,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  userInfo: {
+    alignItems: 'center',
+  },
+  userImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 8,
+  },
+  SettingsContainer: {
+    flex: 1,
+    padding: 16,
+  },
+  SettingsOption: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+  },
 });

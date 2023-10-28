@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Modal, Text, Alert, Pressable, TouchableOpacity, FlatList} from 'react-native';
+import {View, Modal, Text, Alert, Pressable, TouchableOpacity, FlatList, ListView} from 'react-native';
 import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
 
@@ -9,7 +9,7 @@ export default class FilterModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            modalVisible: false,
+            modalVisible: true,
             selectedItem: null,
             renderData:props.renderData,
         };
@@ -28,58 +28,67 @@ export default class FilterModal extends Component {
     }
     render() {
         return (
-            <View style={styles.centeredView}>
+            <View>
                 <Modal
                     animationType="slide"
                     transparent={true}
                     visible={this.state.modalVisible}
                     onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
                         this.setModalVisible(!this.state.modalVisible);
                     }}>
-                    <View style={styles.centeredView}>
+                    <View  style={{
+                        position: 'absolute',
+                        bottom:35,
+                        width:'100%'
+                    }}>
                         <View style={styles.modalView}>
                             <Text style={styles.modalText}>Select/deselect categories</Text>
                             <FlatList
-                                //horizontal={true}
+                                // horizontal={true}
+                                numColumns={4}
                                 data={this.state.renderData}
                                 keyExtractor={item => item.id.toString()}
                                 showsHorizontalScrollIndicator={false}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity onPress={() => this.onPressHandler(item.id)}>
-                                        <View
+                                        <Text
                                             style={
                                                 item.selected==true
                                                     ? {
                                                         padding: 10,
-                                                        borderRadius: 5,
+                                                        margin: 5,
                                                         backgroundColor: '#15e536',
                                                     }
                                                     : {
                                                         padding: 10,
-                                                        borderRadius: 5,
+                                                        margin: 5,
                                                         backgroundColor: '#a1a1a1',
                                                     }
                                             }>
-                                            <Text>{item.name}</Text>
-                                        </View>
+                                            {item.name}
+                                        </Text>
                                     </TouchableOpacity>
                                 )}
                             />
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => this.setModalVisible(!this.state.modalVisible)}>
-                                <Text style={styles.textStyle}>{constants.hideFilterText}</Text>
-                            </Pressable>
+                            <View>
+                                <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => this.setModalVisible(!this.state.modalVisible)}>
+                                    <Text style={styles.textStyle}>{constants.hideFilterText}</Text>
+                                </Pressable>
+                            </View>
+
                         </View>
                     </View>
                 </Modal>
                 {!this.state.modalVisible ?
-                    <Pressable
+                    <View style={styles.centeredView}><Pressable
                         style={[styles.button, styles.buttonOpen]}
                         onPress={() => this.setModalVisible(true)}>
                         <Text style={styles.textStyle}>{constants.showFilterText}</Text>
-                    </Pressable> : null
+                    </Pressable>
+                    </View>
+                     : null
                 }
             </View>
         );

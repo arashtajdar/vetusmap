@@ -49,6 +49,16 @@ export default class MapScreen extends React.Component {
     this.setState({
       selectedCategoryIds: this.state.renderData.filter(item => item.selected).map(item => item.id),
     });
+    Geolocation.getCurrentPosition(loc => {
+      let region = {
+        latitude: loc.coords.latitude,
+        longitude: loc.coords.longitude,
+        latitudeDelta: constants.initialLatDelta,
+        longitudeDelta: constants.initialLongDelta,
+      }
+      this.handleRegionChangeComplete(region);
+      });
+
   };
   callApiToUpdateMap = () => {
     axios

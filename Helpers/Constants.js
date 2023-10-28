@@ -8,3 +8,4 @@ export const maxZoomLevelValue = 20;
 export const msgFetchingFreshData = 'Fetching the fresh data ...';
 export const msgZoomOutLimitReached = 'Please zoom in to show the markers!';
 export const btnMoreInfo = 'More Info';
+export const showFilterText = 'Show Filters';

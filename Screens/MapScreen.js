@@ -8,6 +8,7 @@ import axios from 'axios';
 import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
 import {markerImages} from '../Helpers/MarkerImages';
+import FilterModal from './FilterModal';
 
 export default class MapScreen extends React.Component {
   // Constructor
@@ -19,8 +20,8 @@ export default class MapScreen extends React.Component {
       markers: [],
       locationData: [],
       selectMarker: null,
-      loading: true, // Initialize as loading
-      bottomTooFarMessage: false, // Initialize as loading
+      loading: true,
+      bottomTooFarMessage: false,
     };
   }
 
@@ -179,6 +180,7 @@ export default class MapScreen extends React.Component {
             </Text>
           </View>
         ) : null}
+      <FilterModal/>
       </View>
     );
   }

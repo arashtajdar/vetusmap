@@ -32,7 +32,7 @@ export default class MapScreen extends React.Component {
   // Functions
   callApiToUpdateMap = () => {
     axios
-      .get(constants.apiUrl)
+      .get(constants.apiBaseUrl + constants.endpointLocations )
       .then(response => {
         const mapResponseData = response.data.data;
         if (Array.isArray(mapResponseData)) {

@@ -32,7 +32,7 @@ export default class FilterModal extends Component {
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => this.setModalVisible(!this.state.modalVisible)}>
-                                <Text style={styles.textStyle}>Hide Modal</Text>
+                                <Text style={styles.textStyle}>{constants.hideFilterText}</Text>
                             </Pressable>
                         </View>
                     </View>

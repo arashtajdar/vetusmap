@@ -9,7 +9,18 @@ import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
 import {markerImages} from '../Helpers/MarkerImages';
 import FilterModal from './FilterModal';
-
+const Data = [
+  {
+    id: 1,
+    name: 'Nasoni',
+    selected: true,
+  },
+  {
+    id: 2,
+    name: 'Hotel',
+    selected: true,
+  },
+];
 export default class MapScreen extends React.Component {
   // Constructor
   constructor(props) {
@@ -22,6 +33,8 @@ export default class MapScreen extends React.Component {
       selectMarker: null,
       loading: true,
       bottomTooFarMessage: false,
+      renderData: Data,
+      selectedCategoryIds: Data.filter(item => item.selected).map(item => item.id),
     };
   }
 
@@ -31,6 +44,12 @@ export default class MapScreen extends React.Component {
   };
 
   // Functions
+  updateRenderData = (newData) => {
+    this.setState({ renderData: newData });
+    this.setState({
+      selectedCategoryIds: this.state.renderData.filter(item => item.selected).map(item => item.id),
+    });
+  };
   callApiToUpdateMap = () => {
     axios
       .get(constants.apiBaseUrl + constants.endpointLocations )
@@ -96,7 +115,8 @@ export default class MapScreen extends React.Component {
           marker.latitude >= latitude - latitudeDelta / 2 &&
           marker.latitude <= latitude + latitudeDelta / 2 &&
           marker.longitude >= longitude - longitudeDelta / 2 &&
-          marker.longitude <= longitude + longitudeDelta / 2
+          marker.longitude <= longitude + longitudeDelta / 2 &&
+          this.state.selectedCategoryIds.includes(marker.category_id)
         );
       });
       this.setState({
@@ -180,7 +200,7 @@ export default class MapScreen extends React.Component {
             </Text>
           </View>
         ) : null}
-      <FilterModal/>
+      <FilterModal renderData={this.state.renderData} updateRenderData={this.updateRenderData}/>
       </View>
     );
   }

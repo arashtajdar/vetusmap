@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Modal, Text, Alert, Pressable} from 'react-native';
+import {View, Modal, Text, Alert, Pressable, TouchableOpacity, FlatList} from 'react-native';
 import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
 
@@ -10,7 +10,18 @@ export default class FilterModal extends Component {
         super(props);
         this.state = {
             modalVisible: false,
+            selectedItem: null,
+            renderData:props.renderData,
         };
+    }
+    onPressHandler(id) {
+        for(let data of this.state.renderData){
+            if(data.id===id){
+                data.selected=(data.selected==null)?true:!data.selected;
+                break;
+            }
+        }
+        this.props.updateRenderData(this.state.renderData); // Update renderData in the parent component
     }
     setModalVisible = (flag) => {
         this.setState({modalVisible: flag});
@@ -28,7 +39,33 @@ export default class FilterModal extends Component {
                     }}>
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Hello World!</Text>
+                            <Text style={styles.modalText}>Select/deselect categories</Text>
+                            <FlatList
+                                //horizontal={true}
+                                data={this.state.renderData}
+                                keyExtractor={item => item.id.toString()}
+                                showsHorizontalScrollIndicator={false}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity onPress={() => this.onPressHandler(item.id)}>
+                                        <View
+                                            style={
+                                                item.selected==true
+                                                    ? {
+                                                        padding: 10,
+                                                        borderRadius: 5,
+                                                        backgroundColor: '#15e536',
+                                                    }
+                                                    : {
+                                                        padding: 10,
+                                                        borderRadius: 5,
+                                                        backgroundColor: '#a1a1a1',
+                                                    }
+                                            }>
+                                            <Text>{item.name}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                )}
+                            />
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => this.setModalVisible(!this.state.modalVisible)}>

@@ -9,7 +9,7 @@ export default class FilterModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            modalVisible: true,
+            modalVisible: false,
             selectedItem: null,
             renderData:props.renderData,
         };

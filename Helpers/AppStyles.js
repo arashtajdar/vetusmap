@@ -176,11 +176,11 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    zIndex : 100,
+    zIndex: 100,
   },
   buttonOpen: {
-    position:'absolute',
-    bottom:50,
+    position: 'absolute',
+    bottom: 50,
     backgroundColor: '#F194FF',
   },
   buttonClose: {

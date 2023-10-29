@@ -34,7 +34,9 @@ export default class MapScreen extends React.Component {
       loading: true,
       bottomTooFarMessage: false,
       renderData: Data,
-      selectedCategoryIds: Data.filter(item => item.selected).map(item => item.id),
+      selectedCategoryIds: Data.filter(item => item.selected).map(
+        item => item.id,
+      ),
     };
   }
 
@@ -44,10 +46,12 @@ export default class MapScreen extends React.Component {
   };
 
   // Functions
-  updateRenderData = (newData) => {
-    this.setState({ renderData: newData });
+  updateRenderData = newData => {
+    this.setState({renderData: newData});
     this.setState({
-      selectedCategoryIds: this.state.renderData.filter(item => item.selected).map(item => item.id),
+      selectedCategoryIds: this.state.renderData
+        .filter(item => item.selected)
+        .map(item => item.id),
     });
     Geolocation.getCurrentPosition(loc => {
       let region = {
@@ -55,14 +59,13 @@ export default class MapScreen extends React.Component {
         longitude: loc.coords.longitude,
         latitudeDelta: constants.initialLatDelta,
         longitudeDelta: constants.initialLongDelta,
-      }
+      };
       this.handleRegionChangeComplete(region);
-      });
-
+    });
   };
   callApiToUpdateMap = () => {
     axios
-      .get(constants.apiBaseUrl + constants.endpointLocations )
+      .get(constants.apiBaseUrl + constants.endpointLocations)
       .then(response => {
         const mapResponseData = response.data.data;
         if (Array.isArray(mapResponseData)) {
@@ -210,7 +213,10 @@ export default class MapScreen extends React.Component {
             </Text>
           </View>
         ) : null}
-      <FilterModal renderData={this.state.renderData} updateRenderData={this.updateRenderData}/>
+        <FilterModal
+          renderData={this.state.renderData}
+          updateRenderData={this.updateRenderData}
+        />
       </View>
     );
   }

@@ -3,11 +3,9 @@ import {
   View,
   Modal,
   Text,
-  Alert,
   Pressable,
   TouchableOpacity,
   FlatList,
-  ListView,
 } from 'react-native';
 import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
@@ -43,12 +41,7 @@ export default class FilterModal extends Component {
           onRequestClose={() => {
             this.setModalVisible(!this.state.modalVisible);
           }}>
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 35,
-              width: '100%',
-            }}>
+          <View style={styles.modalMainContainer}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>Select/deselect categories</Text>
               <FlatList
@@ -62,7 +55,7 @@ export default class FilterModal extends Component {
                     onPress={() => this.onPressHandler(item.id)}>
                     <Text
                       style={
-                        item.selected == true
+                        item.selected === true
                           ? {
                               padding: 10,
                               margin: 5,

@@ -172,6 +172,11 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  modalMainContainer: {
+    position: 'absolute',
+    bottom: 35,
+    width: '100%',
+  },
   button: {
     borderRadius: 20,
     padding: 10,

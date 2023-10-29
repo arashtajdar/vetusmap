@@ -10,3 +10,5 @@ export const msgZoomOutLimitReached = 'Please zoom in to show the markers!';
 export const btnMoreInfo = 'More Info';
 export const showFilterText = 'Show Filters';
 export const hideFilterText = 'Close Filters';
+export const favouritesAdded = 'Added to favourites';
+export const favouritesRemoved = 'Removed from favourites';

@@ -210,4 +210,20 @@ export const styles = StyleSheet.create({
     filterCategoryNameNotSelected: {
         backgroundColor: '#a1a1a1',
     },
+    locationFavouriteView:{
+        position:'absolute',
+        bottom:20,
+        right:20,
+    },
+    locationFavouriteStarButton:{
+        fontSize: 40,
+        shadowOpacity: 10,
+        textShadowRadius: 10,
+        textShadowColor: '#000000',
+        color: '#ffffff',
+
+    },
+    locationFavouriteStarButtonActive:{
+        color: '#e8cb0a',
+    },
 });

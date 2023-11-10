@@ -19,7 +19,7 @@ class ProfileScreen extends Component {
   }
 
   async componentDidMount() {
-    this.checkUserSignIn();
+    await this.checkUserSignIn();
   }
 
   checkUserSignIn = async () => {
@@ -41,9 +41,10 @@ class ProfileScreen extends Component {
             .then(async userInfo => {
               // Update the state with user data before storing it in AsyncStorage
               this.setState({isLoggedIn: true, currentUser: userInfo});
-
-              // Store user data in AsyncStorage for persistence
-              await AsyncStorage.setItem('user', JSON.stringify(userInfo));
+              GoogleSignin.getTokens().then(async res=>{
+                await AsyncStorage.setItem('user', JSON.stringify(userInfo));
+                await AsyncStorage.setItem('accessToken', res.accessToken);
+              });
             })
             .catch(error => {
               console.log('Error during sign-in: ', error);
@@ -58,14 +59,11 @@ class ProfileScreen extends Component {
   handleSignOut = async () => {
     try {
       await GoogleSignin.signOut();
-      console.log('Signed out');
+      await AsyncStorage.removeItem('accessToken');
+      await AsyncStorage.removeItem('user');
     } catch (error) {
       console.error('Error during sign-out: ', error);
     }
-
-    // Remove user data from AsyncStorage when signing out
-    await AsyncStorage.removeItem('user');
-
     this.setState({
       isLoggedIn: false,
       currentUser: null,

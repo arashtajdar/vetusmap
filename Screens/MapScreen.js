@@ -9,6 +9,21 @@ import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
 import {markerImages} from '../Helpers/MarkerImages';
 import FilterModal from './FilterModal';
+import {Logger} from 'aws-cloudwatch-log-browser';
+import * as Env from '../Helpers/EnvConstants';
+
+const cloudWatchConfig = {
+  logGroupName: Env.logGroupName,
+  logStreamName: Env.logStreamName,
+  region: Env.region,
+  accessKeyId: Env.accessKeyId,
+  secretAccessKey: Env.secretAccessKey,
+  uploadFreq: 10000, 	// Optional. Send logs to AWS LogStream in batches after 10 seconds intervals.
+  local: false 		// Optional. If set to true, the log will fall back to the standard 'console.log'.
+}
+const logger = new Logger(cloudWatchConfig);
+const today = "iiiii";
+
 const Data = [
   {
     id: 1,
@@ -34,6 +49,7 @@ export default class MapScreen extends React.Component {
       loading: true,
       bottomTooFarMessage: false,
       renderData: Data,
+      today: today,
       selectedCategoryIds: Data.filter(item => item.selected).map(
         item => item.id,
       ),
@@ -64,6 +80,7 @@ export default class MapScreen extends React.Component {
     });
   };
   callApiToUpdateMap = () => {
+    logger.log('API: getLocation called.')
     axios
       .get(constants.apiBaseUrl + constants.endpointLocations)
       .then(response => {
@@ -95,6 +112,7 @@ export default class MapScreen extends React.Component {
         }
       })
       .catch(error => {
+        logger.log(error);
         this.setState({loading: false}); // Set loading to false in case of an error
       });
   };

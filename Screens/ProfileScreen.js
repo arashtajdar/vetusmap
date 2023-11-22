@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, Button, Image} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Config from 'react-native-config';
+import * as Env from '../Helpers/EnvConstants';
 import {styles} from '../Helpers/AppStyles';
 
 class ProfileScreen extends Component {
@@ -13,7 +13,7 @@ class ProfileScreen extends Component {
       currentUser: null,
     };
     GoogleSignin.configure({
-      androidClientId: Config.OAUTH_KEY,
+      androidClientId: Env.oauthKey,
       iosClientId: 'ADD_YOUR_iOS_CLIENT_ID_HERE',
     });
   }
@@ -52,7 +52,7 @@ class ProfileScreen extends Component {
         }
       })
       .catch(error => {
-        console.log('Error during sign-in: ', error);
+        console.log('Play service error: ', error);
       });
   };
 

@@ -6,18 +6,20 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Toast from 'react-native-toast-message';
 import * as constants from '../Helpers/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
+import Geolocation from "@react-native-community/geolocation";
 
 export default class LocationScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       thisLocation: null,
-      favourite: false,
+      isInFavouriteList: false,
       loggedIn: false,
     };
   }
   componentDidMount = () => {
-    console.log(this.checkLogin());
+    this.checkLogin();
     let selectedLocation = this.props.route.params.selectedLocation;
     this.setState({
       thisLocation: selectedLocation,
@@ -42,15 +44,79 @@ export default class LocationScreen extends React.Component {
   }
   ToggleFavourite = () => {
     this.setState({
-      favourite: !this.state.favourite,
+      isInFavouriteList: !this.state.isInFavouriteList,
     });
-    Toast.show({
-      type: 'info',
-      text1: this.state.favourite ? constants.favouritesRemoved : constants.favouritesAdded,
-      position: 'bottom',
-      bottomOffset : 22
-    });
+    if(!this.state.isInFavouriteList){
+      this.AddToFavorites().then(r => {
+        Toast.show({
+          type: 'info',
+          text1: this.state.isInFavouriteList ? constants.favouritesRemoved : constants.favouritesAdded,
+          position: 'bottom',
+          bottomOffset : 22
+        });
+      });
+    }else{
+      this.RemoveFromFavorites().then(r => {
+        Toast.show({
+          type: 'info',
+          text1: this.state.isInFavouriteList ? constants.favouritesRemoved : constants.favouritesAdded,
+          position: 'bottom',
+          bottomOffset : 22
+        });
+      });
+    }
   }
+  AddToFavorites = async () => {
+    const token = await AsyncStorage.getItem('token');
+    let data = JSON.stringify({
+      "location_id": this.state.thisLocation.id
+    });
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: constants.apiBaseUrl + constants.endpointAddToFavorites,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      data : data
+    };
+
+    axios.request(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
+  RemoveFromFavorites= async () => {
+    const token = await AsyncStorage.getItem('token');
+    let data = JSON.stringify({
+      "location_id": this.state.thisLocation.id
+    });
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: constants.apiBaseUrl + constants.endpointRemoveFromFavorites,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      data : data
+    };
+
+    axios.request(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
+
   render() {
     if (this.state.thisLocation != null) {
       return (
@@ -67,7 +133,7 @@ export default class LocationScreen extends React.Component {
                   <MaterialCommunityIcons
                       name={'star'}
                       style={[styles.locationFavouriteStarButton,
-                        this.state.favourite ? styles.locationFavouriteStarButtonActive : null]}
+                        this.state.isInFavouriteList ? styles.locationFavouriteStarButtonActive : null]}
                   />
                 </TouchableOpacity> : null
             }

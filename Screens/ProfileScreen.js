@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Env from '../Helpers/EnvConstants';
 import {styles} from '../Helpers/AppStyles';
 import axios from 'axios';
+import * as constants from '../Helpers/Constants';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -53,7 +54,7 @@ class ProfileScreen extends Component {
                 let config = {
                   method: 'post',
                   maxBodyLength: Infinity,
-                  url: 'http://vetus.arashtajdar.com/api/login/callback',
+                  url: constants.apiBaseUrl + constants.endpointLocations,
                   headers: {
                     'Content-Type': 'application/json'
                   },

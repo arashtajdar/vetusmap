@@ -41,34 +41,34 @@ class ProfileScreen extends Component {
           GoogleSignin.signIn()
             .then(async userInfo => {
               //
-              let data = JSON.stringify({
-                "provider": "google",
-                "access_provider_token": "ya29.a0AfB_byCrmsImG03NyUp9R7CgpiCb4HMYIooobd-1IMrxoG1D1t7ljM6DjmM1ctlD10fFLSRMTDXzoNDW0mYrdpVQFf6cfFQVTjDE39_ucksurJUExB15aALtWcwBTLIBB_VzL9mED1M5OVNRC1TtXQuJgUODz_Nj7waCgYKAeISARESFQHGX2MifYwts4LdkzeEFEImwWH5zQ0169"
-              });
-
-              let config = {
-                method: 'post',
-                maxBodyLength: Infinity,
-                url: 'http://vetus.arashtajdar.com/api/login/callback',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                data : data
-              };
-              console.log('loging innnnnn !!!!');
-              axios.request(config)
-                  .then(async (response) => {
-                    await AsyncStorage.setItem('token', response.data.token);
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              // Update the state with user data before storing it in AsyncStorage
-              this.setState({isLoggedIn: true, currentUser: userInfo});
               GoogleSignin.getTokens().then(async res=>{
                 await AsyncStorage.setItem('user', JSON.stringify(userInfo));
                 await AsyncStorage.setItem('accessToken', res.accessToken);
                 console.log(res.accessToken);
+                let data = JSON.stringify({
+                  "provider": "google",
+                  "access_provider_token": res.accessToken
+                });
+
+                let config = {
+                  method: 'post',
+                  maxBodyLength: Infinity,
+                  url: 'http://vetus.arashtajdar.com/api/login/callback',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  data : data
+                };
+                console.log('loging innnnnn !!!!');
+                axios.request(config)
+                    .then(async (response) => {
+                      await AsyncStorage.setItem('token', response.data.token);
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                // Update the state with user data before storing it in AsyncStorage
+                this.setState({isLoggedIn: true, currentUser: userInfo});
               });
             })
             .catch(error => {

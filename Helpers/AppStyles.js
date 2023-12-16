@@ -94,8 +94,9 @@ export const styles = StyleSheet.create({
         flex: 1,
     },
     locationScreenImage: {
-        width: '100%',
-        height: '50%',
+        width: "100%",
+        height: 100,
+        resizeMode: 'contain'
     },
     locationMainView: {
         width: '100%',
@@ -212,9 +213,11 @@ export const styles = StyleSheet.create({
     },
     locationFavouriteView:{
         position:'absolute',
-        bottom:20,
+        bottom:40,
         right:20,
+        zIndex:100
     },
+
     locationFavouriteStarButton:{
         fontSize: 40,
         shadowOpacity: 10,
@@ -226,8 +229,16 @@ export const styles = StyleSheet.create({
     locationFavouriteStarButtonActive:{
         color: '#e8cb0a',
     },
-    favoritesButtonView:{
+    locationReviewView:{
         position: "absolute",
         bottom:20,
-    }
+        left:10,
+    },
+    locationReviewButton:{
+        fontSize: 40,
+        shadowOpacity: 10,
+        textShadowRadius: 10,
+        textShadowColor: '#000000',
+        color: '#ffffff',
+    },
 });

@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import Geolocation from "@react-native-community/geolocation";
 import PropTypes from "prop-types";
+import {endpointReviews} from "../Helpers/Constants";
 
 let selectedLocation = [];
 // selectedLocation.propTypes = {
@@ -24,6 +25,7 @@ console.log(selectedLocation);
     this.state = {
       thisLocation: null,
       isInFavouriteList: !!selectedLocation.favorites.length ,
+      userWroteReview: false ,
       loggedIn: false,
     };
   }
@@ -50,6 +52,36 @@ console.log(selectedLocation);
       });
     }
   }
+  WriteReview = async () => {
+    const token = await AsyncStorage.getItem('token');
+
+    let data = JSON.stringify({
+      "location_id": this.state.thisLocation.id,
+      "rating": 4,
+      "comment": "A wonderful experience"
+    });
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: constants.apiBaseUrl + constants.endpointReviews,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      data: data
+    };
+
+    axios.request(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+  }
+
   ToggleFavourite = () => {
     this.setState({
       isInFavouriteList: !this.state.isInFavouriteList,
@@ -58,7 +90,7 @@ console.log(selectedLocation);
       this.AddToFavorites().then(r => {
         Toast.show({
           type: 'info',
-          text1: this.state.isInFavouriteList ? constants.favouritesRemoved : constants.favouritesAdded,
+          text1: constants.favouritesAdded,
           position: 'bottom',
           bottomOffset : 22
         });
@@ -67,7 +99,7 @@ console.log(selectedLocation);
       this.RemoveFromFavorites().then(r => {
         Toast.show({
           type: 'info',
-          text1: this.state.isInFavouriteList ? constants.favouritesRemoved : constants.favouritesAdded,
+          text1: constants.favouritesRemoved,
           position: 'bottom',
           bottomOffset : 22
         });
@@ -133,6 +165,9 @@ console.log(selectedLocation);
               <Text>{this.state.thisLocation.name}</Text>
               <Image style={styles.locationScreenImage} source={nasoniImage} />
             </View>
+            <View>
+
+            </View>
             {this.state.loggedIn ?
                 <TouchableOpacity
                     style={styles.locationFavouriteView}
@@ -145,6 +180,18 @@ console.log(selectedLocation);
                   />
                 </TouchableOpacity> : null
             }
+            {!this.state.userWroteReview ?
+                <TouchableOpacity
+                    style={styles.locationReviewView}
+                    onPress={this.WriteReview}
+                >
+                  <MaterialCommunityIcons
+                      name={'pencil-circle-outline'}
+                      style={styles.locationReviewButton}
+                  />
+                </TouchableOpacity> : null
+            }
+
             <Toast/>
           </View>
 

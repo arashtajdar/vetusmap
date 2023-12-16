@@ -8,6 +8,7 @@ export const endpointAddToFavorites = 'favourites';
 export const endpointRemoveFromFavorites = 'favourites/remove';
 export const endpointGoogleLoginCallback = 'login/callback';
 export const endpointFetchAllUsersFavorites = 'favourites/fetchAll';
+export const endpointReviews = 'reviews';
 export const maxZoomLevelValue = 20;
 export const msgFetchingFreshData = 'Fetching the fresh data ...';
 export const msgZoomOutLimitReached = 'Please zoom in to show the markers!';

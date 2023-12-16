@@ -1,14 +1,6 @@
-import React from 'react';
-import {
-    SafeAreaView,
-    View,
-    FlatList,
-    StyleSheet,
-    Text,
-    StatusBar,
-} from 'react-native';
-import {GoogleSignin} from "@react-native-google-signin/google-signin";
-import * as Env from "../Helpers/EnvConstants";
+import React, { useEffect } from 'react';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import useBackHandler from '../Helpers/useBackHandler';
 
 const DATA = [
     {
@@ -25,31 +17,23 @@ const DATA = [
     },
 ];
 
-const Item = ({title}) => (
+const Item = ({ title }) => (
     <View style={styles.item}>
         <Text style={styles.title}>{title}</Text>
     </View>
 );
-export default class FavoritesScreen extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    async componentDidMount() {
-    }
-    render() {
-        return (
-            <SafeAreaView style={styles.container}>
-                <FlatList
-                    data={DATA}
-                    renderItem={({item}) => <Item title={item.title} />}
-                    keyExtractor={item => item.id}
-                />
-            </SafeAreaView>
-        );
-    }
-}
 
-
+const FavoritesScreen = ({ navigation }) => {
+    return (
+        <SafeAreaView style={styles.container}>
+            <FlatList
+                data={DATA}
+                renderItem={({ item }) => <Item title={item.title} />}
+                keyExtractor={item => item.id}
+            />
+        </SafeAreaView>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -66,3 +50,5 @@ const styles = StyleSheet.create({
         fontSize: 32,
     },
 });
+
+export default FavoritesScreen;

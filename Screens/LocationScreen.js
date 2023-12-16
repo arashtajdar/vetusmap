@@ -8,19 +8,27 @@ import * as constants from '../Helpers/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import Geolocation from "@react-native-community/geolocation";
+import PropTypes from "prop-types";
 
+let selectedLocation = [];
+// selectedLocation.propTypes = {
+//   name: PropTypes.string,
+//   favorites: PropTypes.array,
+// };
 export default class LocationScreen extends React.Component {
   constructor(props) {
     super(props);
+    selectedLocation = this.props.route.params.selectedLocation;
+console.log(selectedLocation.id);
+console.log(selectedLocation);
     this.state = {
       thisLocation: null,
-      isInFavouriteList: false,
+      isInFavouriteList: !!selectedLocation.favorites.length ,
       loggedIn: false,
     };
   }
   componentDidMount = () => {
     this.checkLogin();
-    let selectedLocation = this.props.route.params.selectedLocation;
     this.setState({
       thisLocation: selectedLocation,
     });

@@ -156,6 +156,7 @@ export default class MapScreen extends React.Component {
   };
   mapSection = () => {
     const selectLocation = location => {
+      console.log(location);
       this.props.navigation.navigate('Location', {
         selectedLocation: location,
       });

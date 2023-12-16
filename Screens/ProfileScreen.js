@@ -54,7 +54,7 @@ class ProfileScreen extends Component {
                 let config = {
                   method: 'post',
                   maxBodyLength: Infinity,
-                  url: constants.apiBaseUrl + constants.endpointLocations,
+                  url: constants.apiBaseUrl + constants.endpointGoogleLoginCallback,
                   headers: {
                     'Content-Type': 'application/json'
                   },
@@ -64,6 +64,7 @@ class ProfileScreen extends Component {
                 axios.request(config)
                     .then(async (response) => {
                       await AsyncStorage.setItem('token', response.data.token);
+                      console.log(response.data.token);
                     })
                     .catch((error) => {
                       console.log(error);

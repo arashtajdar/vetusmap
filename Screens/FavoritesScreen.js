@@ -1,6 +1,10 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
 import useBackHandler from '../Helpers/useBackHandler';
+import axios from "axios";
+import * as constants from "../Helpers/Constants";
+import {endpointFetchAllUsersFavorites} from "../Helpers/Constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const DATA = [
     {
@@ -24,12 +28,45 @@ const Item = ({ title }) => (
 );
 
 const FavoritesScreen = ({ navigation }) => {
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                const config = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    url: constants.apiBaseUrl + constants.endpointFetchAllUsersFavorites,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                };
+
+                const response = await axios.request(config);
+                console.log(response.data);
+                setData(response.data); // Assuming the data is an array
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const renderItem = ({ item }) => (
+        <View style={styles.item}>
+            <Text style={styles.title}>{item.title}</Text>
+        </View>
+    );
+
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
-                data={DATA}
-                renderItem={({ item }) => <Item title={item.title} />}
-                keyExtractor={item => item.id}
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id}
             />
         </SafeAreaView>
     );

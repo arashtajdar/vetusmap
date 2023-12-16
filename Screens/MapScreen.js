@@ -11,6 +11,7 @@ import {markerImages} from '../Helpers/MarkerImages';
 import FilterModal from './FilterModal';
 import {Logger} from 'aws-cloudwatch-log-browser';
 import * as Env from '../Helpers/EnvConstants';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const cloudWatchConfig = {
   logGroupName: Env.logGroupName,
@@ -79,41 +80,52 @@ export default class MapScreen extends React.Component {
       this.handleRegionChangeComplete(region);
     });
   };
-  callApiToUpdateMap = () => {
+  callApiToUpdateMap = async () => {
     logger.log('API: getLocation called.');
-    axios.get(constants.apiBaseUrl + constants.endpointLocations)
+    const token = await AsyncStorage.getItem('token');
+
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: constants.apiBaseUrl + constants.endpointLocations,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+    };
+    axios.request(config)
         .then(response => {
-        const mapResponseData = response.data.data;
-        if (Array.isArray(mapResponseData)) {
-          this.state.locationData = mapResponseData;
-          Geolocation.getCurrentPosition(loc => {
-            const filteredLocations = this.state.locationData.filter(marker => {
-              return (
-                marker.latitude >=
-                  loc.coords.latitude - constants.initialLatDelta / 2 &&
-                marker.latitude <=
-                  loc.coords.latitude + constants.initialLatDelta / 2 &&
-                marker.longitude >=
-                  loc.coords.longitude - constants.initialLongDelta / 2 &&
-                marker.longitude <=
-                  loc.coords.longitude + constants.initialLongDelta / 2
-              );
+          const mapResponseData = response.data.data;
+          if (Array.isArray(mapResponseData)) {
+            this.state.locationData = mapResponseData;
+            Geolocation.getCurrentPosition(loc => {
+              const filteredLocations = this.state.locationData.filter(marker => {
+                return (
+                    marker.latitude >=
+                    loc.coords.latitude - constants.initialLatDelta / 2 &&
+                    marker.latitude <=
+                    loc.coords.latitude + constants.initialLatDelta / 2 &&
+                    marker.longitude >=
+                    loc.coords.longitude - constants.initialLongDelta / 2 &&
+                    marker.longitude <=
+                    loc.coords.longitude + constants.initialLongDelta / 2
+                );
+              });
+              this.setState({
+                markers: filteredLocations,
+              });
             });
             this.setState({
-              markers: filteredLocations,
+              loading: false, // Data has been loaded
             });
-          });
-          this.setState({
-            loading: false, // Data has been loaded
-          });
-        } else {
+          } else {
+            this.setState({loading: false}); // Set loading to false in case of an error
+          }
+        })
+        .catch(error => {
+          logger.log(error);
           this.setState({loading: false}); // Set loading to false in case of an error
-        }
-      })
-      .catch(error => {
-        logger.log(error);
-        this.setState({loading: false}); // Set loading to false in case of an error
-      });
+        });
   };
 
   getMyLocation = () => {
@@ -149,6 +161,8 @@ export default class MapScreen extends React.Component {
           this.state.selectedCategoryIds.includes(marker.category_id)
         );
       });
+      console.log(filteredLocations);
+
       this.setState({
         markers: filteredLocations,
       });

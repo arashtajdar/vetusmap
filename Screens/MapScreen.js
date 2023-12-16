@@ -58,7 +58,6 @@ export default class MapScreen extends React.Component {
 
   // component actions
   componentDidMount = () => {
-    console.log(';;;;');
     this.callApiToUpdateMap();
   };
 
@@ -82,12 +81,9 @@ export default class MapScreen extends React.Component {
   };
   callApiToUpdateMap = () => {
     logger.log('API: getLocation called.');
-    console.log(constants.apiBaseUrl + constants.endpointLocations);
-    axios
-      .get(constants.apiBaseUrl + constants.endpointLocations)
-      .then(response => {
+    axios.get(constants.apiBaseUrl + constants.endpointLocations)
+        .then(response => {
         const mapResponseData = response.data.data;
-        console.log(mapResponseData[0]);
         if (Array.isArray(mapResponseData)) {
           this.state.locationData = mapResponseData;
           Geolocation.getCurrentPosition(loc => {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Button, Image} from 'react-native';
+import {View, Text, Button, Image, Pressable} from 'react-native';
 import {GoogleSignin, statusCodes} from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Env from '../Helpers/EnvConstants';
@@ -118,6 +118,13 @@ class ProfileScreen extends Component {
         ) : (
           <Button title="Sign in with Google" onPress={this.handleSignIn} />
         )}
+        <View style={styles.favoritesButtonView}>
+          <Button title="Favorites"
+                  onPress={() => {this.props.navigation.navigate('Favorites')}}
+                  color="#f194ff"
+          />
+        </View>
+
       </View>
     );
   }

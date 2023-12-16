@@ -226,4 +226,8 @@ export const styles = StyleSheet.create({
     locationFavouriteStarButtonActive:{
         color: '#e8cb0a',
     },
+    favoritesButtonView:{
+        position: "absolute",
+        bottom:20,
+    }
 });

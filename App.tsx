@@ -12,6 +12,7 @@ import LocationScreen from './Screens/LocationScreen';
 import SettingsScreen from './Screens/SettingsScreen';
 import ProfileScreen from './Screens/ProfileScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import FavoritesScreen from "./Screens/FavoritesScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -26,6 +27,7 @@ function HomeStack() {
         })}
       />
       <Stack.Screen name={'Location'} component={LocationScreen} />
+      <Stack.Screen name={'Favorites'} component={FavoritesScreen} />
     </Stack.Navigator>
   );
 }

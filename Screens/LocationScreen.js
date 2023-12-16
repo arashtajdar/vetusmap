@@ -186,6 +186,81 @@ console.log(selectedLocation);
                   <Text>Score</Text>
                   <Text>revew content</Text>
                 </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
               </ScrollView>
             </View>
 

@@ -213,7 +213,7 @@ export const styles = StyleSheet.create({
     },
     locationFavouriteView:{
         position:'absolute',
-        bottom:40,
+        bottom:20,
         right:20,
         zIndex:100
     },

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from '../Helpers/AppStyles';
 import nasoniImage from '../assets/images/nasoni.jpg';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -158,16 +158,37 @@ console.log(selectedLocation);
   };
 
   render() {
+    const users = [
+      {
+        name: 'brynn',
+        avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
+      },      {
+        name: 'brynn',
+        avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
+      },      {
+        name: 'brynn',
+        avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
+      },      {
+        name: 'brynn',
+        avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
+      },
+    ]
     if (this.state.thisLocation != null) {
+
       return (
           <View>
             <View style={styles.locationMainView}>
               <Text>{this.state.thisLocation.name}</Text>
               <Image style={styles.locationScreenImage} source={nasoniImage} />
+              <ScrollView style={{backgroundColor:"#999b9f"}}>
+                <View>
+                  <Text>Nameeeee</Text>
+                  <Text>Score</Text>
+                  <Text>revew content</Text>
+                </View>
+              </ScrollView>
             </View>
-            <View>
 
-            </View>
             {this.state.loggedIn ?
                 <TouchableOpacity
                     style={styles.locationFavouriteView}

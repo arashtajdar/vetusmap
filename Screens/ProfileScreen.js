@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-import {View, Text, Button, Image, Pressable} from 'react-native';
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+import {View, Text, Button, Image} from 'react-native';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Env from '../Helpers/EnvConstants';
 import {styles} from '../Helpers/AppStyles';

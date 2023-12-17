@@ -7,11 +7,6 @@ import Toast from 'react-native-toast-message';
 import * as constants from '../Helpers/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import Geolocation from '@react-native-community/geolocation';
-import PropTypes from 'prop-types';
-import {endpointReviews} from '../Helpers/Constants';
-import {Callout, Marker} from 'react-native-maps';
-import {markerImages} from '../Helpers/MarkerImages';
 
 let selectedLocation = [];
 // selectedLocation.propTypes = {

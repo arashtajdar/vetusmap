@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {View, Text, Button, Image, Pressable} from 'react-native';
-import {GoogleSignin, statusCodes} from '@react-native-google-signin/google-signin';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Env from '../Helpers/EnvConstants';
 import {styles} from '../Helpers/AppStyles';
@@ -42,30 +45,33 @@ class ProfileScreen extends Component {
           GoogleSignin.signIn()
             .then(async userInfo => {
               //
-              GoogleSignin.getTokens().then(async res=>{
+              GoogleSignin.getTokens().then(async res => {
                 await AsyncStorage.setItem('user', JSON.stringify(userInfo));
                 await AsyncStorage.setItem('accessToken', res.accessToken);
                 let data = JSON.stringify({
-                  "provider": "google",
-                  "access_provider_token": res.accessToken
+                  provider: 'google',
+                  access_provider_token: res.accessToken,
                 });
 
                 let config = {
                   method: 'post',
                   maxBodyLength: Infinity,
-                  url: constants.apiBaseUrl + constants.endpointGoogleLoginCallback,
+                  url:
+                    constants.apiBaseUrl +
+                    constants.endpointGoogleLoginCallback,
                   headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                   },
-                  data : data
+                  data: data,
                 };
-                axios.request(config)
-                    .then(async (response) => {
-                      await AsyncStorage.setItem('token', response.data.token);
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    });
+                axios
+                  .request(config)
+                  .then(async response => {
+                    await AsyncStorage.setItem('token', response.data.token);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
                 // Update the state with user data before storing it in AsyncStorage
                 this.setState({isLoggedIn: true, currentUser: userInfo});
               });
@@ -117,12 +123,14 @@ class ProfileScreen extends Component {
           <Button title="Sign in with Google" onPress={this.handleSignIn} />
         )}
         <View style={styles.favoritesButtonView}>
-          <Button title="Favorites"
-                  onPress={() => {this.props.navigation.navigate('Favorites')}}
-                  color="#f194ff"
+          <Button
+            title="Favorites"
+            onPress={() => {
+              this.props.navigation.navigate('Favorites');
+            }}
+            color="#f194ff"
           />
         </View>
-
       </View>
     );
   }

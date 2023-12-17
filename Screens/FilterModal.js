@@ -54,10 +54,12 @@ export default class FilterModal extends Component {
                   <TouchableOpacity
                     onPress={() => this.onPressHandler(item.id)}>
                     <Text
-                      style={[                        item.selected === true
+                      style={[
+                        item.selected === true
                           ? styles.filterCategoryNameSelected
-                          : styles.filterCategoryNameNotSelected,styles.filterCategoryName]
-                      }>
+                          : styles.filterCategoryNameNotSelected,
+                        styles.filterCategoryName,
+                      ]}>
                       {item.name}
                     </Text>
                   </TouchableOpacity>

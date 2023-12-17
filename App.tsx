@@ -12,7 +12,7 @@ import LocationScreen from './Screens/LocationScreen';
 import SettingsScreen from './Screens/SettingsScreen';
 import ProfileScreen from './Screens/ProfileScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import FavoritesScreen from "./Screens/FavoritesScreen";
+import FavoritesScreen from './Screens/FavoritesScreen';
 
 const Tab = createBottomTabNavigator();
 

@@ -45,7 +45,6 @@ const FavoritesScreen = ({ navigation }) => {
                 };
 
                 const response = await axios.request(config);
-                console.log(response.data);
                 setData(response.data); // Assuming the data is an array
             } catch (error) {
                 console.log(error);

@@ -22,8 +22,6 @@ export default class LocationScreen extends React.Component {
   constructor(props) {
     super(props);
     selectedLocation = this.props.route.params.selectedLocation;
-console.log(selectedLocation.id);
-console.log(selectedLocation);
     this.state = {
       thisLocation: null,
       isInFavouriteList: !!selectedLocation.favorites.length ,
@@ -46,8 +44,6 @@ console.log(selectedLocation);
   checkLogin = async () =>{
     const value = await AsyncStorage.getItem('accessToken');
     await this.getAllReviews();
-
-    console.log(value);
     if(value){
       this.setState({
         loggedIn: true,
@@ -174,7 +170,6 @@ console.log(selectedLocation);
     };
 
     await axios.request(config).then(response => {
-      console.log(response.data.data);
       this.setState({
         reviewsList: response.data.data,
       });

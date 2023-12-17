@@ -45,7 +45,6 @@ class ProfileScreen extends Component {
               GoogleSignin.getTokens().then(async res=>{
                 await AsyncStorage.setItem('user', JSON.stringify(userInfo));
                 await AsyncStorage.setItem('accessToken', res.accessToken);
-                console.log(res.accessToken);
                 let data = JSON.stringify({
                   "provider": "google",
                   "access_provider_token": res.accessToken
@@ -60,11 +59,9 @@ class ProfileScreen extends Component {
                   },
                   data : data
                 };
-                console.log('loging innnnnn !!!!');
                 axios.request(config)
                     .then(async (response) => {
                       await AsyncStorage.setItem('token', response.data.token);
-                      console.log(response.data.token);
                     })
                     .catch((error) => {
                       console.log(error);

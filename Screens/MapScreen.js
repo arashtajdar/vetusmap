@@ -161,8 +161,6 @@ export default class MapScreen extends React.Component {
           this.state.selectedCategoryIds.includes(marker.category_id)
         );
       });
-      console.log(filteredLocations);
-
       this.setState({
         markers: filteredLocations,
       });
@@ -170,7 +168,6 @@ export default class MapScreen extends React.Component {
   };
   mapSection = () => {
     const selectLocation = location => {
-      console.log(location);
       this.props.navigation.navigate('Location', {
         selectedLocation: location,
       });

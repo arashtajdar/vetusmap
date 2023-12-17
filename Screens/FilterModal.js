@@ -40,6 +40,7 @@ export default class FilterModal extends Component {
 
       const response = await axios.request(config);
       const categories = response.data.data; // Assuming the API response contains an array of categories
+      console.log(categories);
       const renderData = categories.map(category => ({
         id: category.category_id,
         name: category.name,

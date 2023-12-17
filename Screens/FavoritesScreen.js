@@ -41,7 +41,7 @@ const FavoritesScreen = ({}) => {
 
   const renderItem = ({item}) => (
     <View style={styles.item} >
-      <Text style={styles.title}>{item.location_id}</Text>
+      <Text style={styles.title}>{item.location.name}</Text>
     </View>
   );
 

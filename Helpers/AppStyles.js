@@ -262,4 +262,15 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
   },
+  ReviewRatingContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  ReviewRatingButtonDefault: {
+    borderRadius: 0,
+backgroundColor: "#123145"
+  },
+  ReviewRatingButtonSelected:{
+    backgroundColor: "red",
+  }
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {styles} from '../Helpers/AppStyles';
 import nasoniImage from '../assets/images/nasoni.jpg';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,6 +7,7 @@ import Toast from 'react-native-toast-message';
 import * as constants from '../Helpers/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import {Button} from "@rneui/base";
 
 let selectedLocation = [];
 // selectedLocation.propTypes = {
@@ -24,6 +25,9 @@ export default class LocationScreen extends React.Component {
       userReviewContent: selectedLocation.reviews[0],
       loggedIn: false,
       reviewsList: [],
+      modalVisible: false,
+      commentValue: "",
+      selectedRating: null,
     };
   }
   componentDidMount = () => {
@@ -49,34 +53,35 @@ export default class LocationScreen extends React.Component {
       });
     }
   };
-  WriteReview = async () => {
-    const token = await AsyncStorage.getItem('token');
+  WriteReview = async (rating, comment) => {
+      const token = await AsyncStorage.getItem('token');
 
-    let data = JSON.stringify({
-      location_id: this.state.thisLocation.id,
-      rating: 4,
-      comment: 'A wonderful experience',
-    });
-
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: constants.apiBaseUrl + constants.endpointReviews,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-      data: data,
-    };
-
-    axios
-      .request(config)
-      .then(response => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch(error => {
-        console.log(error);
+      let data = JSON.stringify({
+        location_id: this.state.thisLocation.id,
+        rating: rating,
+        comment: comment,
       });
+
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: constants.apiBaseUrl + constants.endpointReviews,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+        },
+        data: data,
+      };
+
+      axios
+          .request(config)
+          .then(response => {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch(error => {
+            console.log(error);
+          });
+
   };
 
   ToggleFavourite = () => {
@@ -84,7 +89,7 @@ export default class LocationScreen extends React.Component {
       isInFavouriteList: !this.state.isInFavouriteList,
     });
     if (!this.state.isInFavouriteList) {
-      this.AddToFavorites().then(r => {
+      this.AddToFavorites().then(() => {
         Toast.show({
           type: 'info',
           text1: constants.favouritesAdded,
@@ -93,7 +98,7 @@ export default class LocationScreen extends React.Component {
         });
       });
     } else {
-      this.RemoveFromFavorites().then(r => {
+      this.RemoveFromFavorites().then(() => {
         Toast.show({
           type: 'info',
           text1: constants.favouritesRemoved,
@@ -181,11 +186,69 @@ export default class LocationScreen extends React.Component {
         console.log(error);
       });
   };
-
+  setModalVisible = (flag) => {
+    this.setState({
+      modalVisible : flag,
+        }
+    )
+  };
+  rate = (rating) => {
+    this.setState({ selectedRating: rating });
+  }
   render() {
+    const ratesArray = [
+        1,2,3,4,5
+    ];
+
     if (this.state.thisLocation != null) {
       return (
         <View>
+          <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.modalVisible}
+              >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Write a review</Text>
+                <TextInput
+                    editable
+                    multiline
+                    numberOfLines={6}
+                    maxLength={100}
+                    style={{padding: 10}}
+                    onChangeText={(val) => {
+                      this.setState({
+                        commentValue : val
+                      })
+                    }}
+                />
+                <View style={styles.ReviewRatingContainer}>
+                  {ratesArray.map(n => {
+                    return (
+                        <Button
+                            key={n}
+                            style={styles.ReviewRatingButtonDefault}
+                            color={
+                              this.state.selectedRating && n > this.state.selectedRating
+                                  ? '#ababab'
+                                  : '#ffcd00'
+                            }
+                            title={n.toString()}
+                            onPress={() => this.rate(n)}
+                        />
+                    )})}
+                </View>
+                <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => {
+                      this.WriteReview(this.state.selectedRating, this.state.commentValue).then(() => this.setModalVisible(false));
+                    }}>
+                  <Text style={styles.textStyle}>Submit</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
           <View style={styles.locationMainView}>
             <Text>{this.state.thisLocation.name}</Text>
             <Image style={styles.locationScreenImage} source={nasoniImage} />
@@ -242,7 +305,7 @@ export default class LocationScreen extends React.Component {
           {!this.state.userWroteReview ? (
             <TouchableOpacity
               style={styles.locationReviewView}
-              onPress={this.WriteReview}>
+              onPress={() => this.setModalVisible(true)}>
               <MaterialCommunityIcons
                 name={'pencil-circle-outline'}
                 style={styles.locationReviewButton}

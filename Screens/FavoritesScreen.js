@@ -11,7 +11,7 @@ import axios from 'axios';
 import * as constants from '../Helpers/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const FavoritesScreen = ({navigation}) => {
+const FavoritesScreen = ({}) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const FavoritesScreen = ({navigation}) => {
       }
     };
 
-    fetchData().then(r => {});
+    fetchData().then(() => {});
   }, []);
 
   const renderItem = ({item}) => (
@@ -51,6 +51,7 @@ const FavoritesScreen = ({navigation}) => {
         data={data}
         renderItem={renderItem}
         keyExtractor={item => item.id}
+        key={item => item.id}
       />
     </SafeAreaView>
   );

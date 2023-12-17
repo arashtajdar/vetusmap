@@ -1,5 +1,14 @@
 import React from 'react';
-import {Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {styles} from '../Helpers/AppStyles';
 import nasoniImage from '../assets/images/nasoni.jpg';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,7 +16,7 @@ import Toast from 'react-native-toast-message';
 import * as constants from '../Helpers/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import {Button} from "@rneui/base";
+import {Button} from '@rneui/base';
 
 let selectedLocation = [];
 // selectedLocation.propTypes = {
@@ -26,7 +35,7 @@ export default class LocationScreen extends React.Component {
       loggedIn: false,
       reviewsList: [],
       modalVisible: false,
-      commentValue: "",
+      commentValue: '',
       selectedRating: null,
     };
   }
@@ -54,34 +63,33 @@ export default class LocationScreen extends React.Component {
     }
   };
   WriteReview = async (rating, comment) => {
-      const token = await AsyncStorage.getItem('token');
+    const token = await AsyncStorage.getItem('token');
 
-      let data = JSON.stringify({
-        location_id: this.state.thisLocation.id,
-        rating: rating,
-        comment: comment,
+    let data = JSON.stringify({
+      location_id: this.state.thisLocation.id,
+      rating: rating,
+      comment: comment,
+    });
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: constants.apiBaseUrl + constants.endpointReviews,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then(response => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(error => {
+        console.log(error);
       });
-
-      let config = {
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: constants.apiBaseUrl + constants.endpointReviews,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token,
-        },
-        data: data,
-      };
-
-      axios
-          .request(config)
-          .then(response => {
-            console.log(JSON.stringify(response.data));
-          })
-          .catch(error => {
-            console.log(error);
-          });
-
   };
 
   ToggleFavourite = () => {
@@ -186,64 +194,65 @@ export default class LocationScreen extends React.Component {
         console.log(error);
       });
   };
-  setModalVisible = (flag) => {
+  setModalVisible = flag => {
     this.setState({
-      modalVisible : flag,
-        }
-    )
+      modalVisible: flag,
+    });
   };
-  rate = (rating) => {
-    this.setState({ selectedRating: rating });
-  }
+  rate = rating => {
+    this.setState({selectedRating: rating});
+  };
   render() {
-    const ratesArray = [
-        1,2,3,4,5
-    ];
+    const ratesArray = [1, 2, 3, 4, 5];
 
     if (this.state.thisLocation != null) {
       return (
         <View>
           <Modal
-              animationType="slide"
-              transparent={true}
-              visible={this.state.modalVisible}
-              >
+            animationType="slide"
+            transparent={true}
+            visible={this.state.modalVisible}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <Text style={styles.modalText}>Write a review</Text>
                 <TextInput
-                    editable
-                    multiline
-                    numberOfLines={6}
-                    maxLength={100}
-                    style={{padding: 10}}
-                    onChangeText={(val) => {
-                      this.setState({
-                        commentValue : val
-                      })
-                    }}
+                  editable
+                  multiline
+                  numberOfLines={6}
+                  maxLength={100}
+                  style={{padding: 10}}
+                  onChangeText={val => {
+                    this.setState({
+                      commentValue: val,
+                    });
+                  }}
                 />
                 <View style={styles.ReviewRatingContainer}>
                   {ratesArray.map(n => {
                     return (
-                        <Button
-                            key={n}
-                            style={styles.ReviewRatingButtonDefault}
-                            color={
-                              this.state.selectedRating && n > this.state.selectedRating
-                                  ? '#ababab'
-                                  : '#ffcd00'
-                            }
-                            title={n.toString()}
-                            onPress={() => this.rate(n)}
-                        />
-                    )})}
+                      <Button
+                        key={n}
+                        style={styles.ReviewRatingButtonDefault}
+                        color={
+                          this.state.selectedRating &&
+                          n > this.state.selectedRating
+                            ? '#ababab'
+                            : '#ffcd00'
+                        }
+                        title={n.toString()}
+                        onPress={() => this.rate(n)}
+                      />
+                    );
+                  })}
                 </View>
                 <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => {
-                      this.WriteReview(this.state.selectedRating, this.state.commentValue).then(() => this.setModalVisible(false));
-                    }}>
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    this.WriteReview(
+                      this.state.selectedRating,
+                      this.state.commentValue,
+                    ).then(() => this.setModalVisible(false));
+                  }}>
                   <Text style={styles.textStyle}>Submit</Text>
                 </Pressable>
               </View>

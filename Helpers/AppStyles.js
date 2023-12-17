@@ -268,9 +268,5 @@ export const styles = StyleSheet.create({
   },
   ReviewRatingButtonDefault: {
     borderRadius: 0,
-backgroundColor: "#123145"
   },
-  ReviewRatingButtonSelected:{
-    backgroundColor: "red",
-  }
 });

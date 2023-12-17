@@ -241,4 +241,24 @@ export const styles = StyleSheet.create({
         textShadowColor: '#000000',
         color: '#ffffff',
     },
+    reviewList:{
+        backgroundColor: "#c2efe9",
+    },
+    reviewListItem:{
+        padding: 10,
+        borderBottomWidth: 1,
+        borderStyle: "dotted",
+    },
+    reviewListUserReview:{
+        backgroundColor: "#dbfcfa",
+    },
+    reviewListItemName:{
+        fontWeight: "600",
+    },
+    reviewListItemScore:{
+        paddingLeft: 5,
+    },
+    reviewListItemComment:{
+        padding:10,
+    },
 });

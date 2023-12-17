@@ -10,6 +10,8 @@ import axios from "axios";
 import Geolocation from "@react-native-community/geolocation";
 import PropTypes from "prop-types";
 import {endpointReviews} from "../Helpers/Constants";
+import {Callout, Marker} from "react-native-maps";
+import {markerImages} from "../Helpers/MarkerImages";
 
 let selectedLocation = [];
 // selectedLocation.propTypes = {
@@ -25,8 +27,10 @@ console.log(selectedLocation);
     this.state = {
       thisLocation: null,
       isInFavouriteList: !!selectedLocation.favorites.length ,
-      userWroteReview: false ,
+      userWroteReview: !!selectedLocation.reviews.length ,
+      userReviewContent: selectedLocation.reviews[0] ,
       loggedIn: false,
+      reviewsList: [],
     };
   }
   componentDidMount = () => {
@@ -41,6 +45,8 @@ console.log(selectedLocation);
 
   checkLogin = async () =>{
     const value = await AsyncStorage.getItem('accessToken');
+    await this.getAllReviews();
+
     console.log(value);
     if(value){
       this.setState({
@@ -156,111 +162,56 @@ console.log(selectedLocation);
           console.log(error);
         });
   };
+  getAllReviews= async () => {
+    const config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: constants.apiBaseUrl + constants.endpointReviews + "?location_id=" + this.state.thisLocation.id,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + await AsyncStorage.getItem('token')
+      },
+    };
+
+    await axios.request(config).then(response => {
+      console.log(response.data.data);
+      this.setState({
+        reviewsList: response.data.data,
+      });
+    }).catch(error => {
+        console.log(error);
+    });
+
+  }
 
   render() {
-    const users = [
-      {
-        name: 'brynn',
-        avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
-      },      {
-        name: 'brynn',
-        avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
-      },      {
-        name: 'brynn',
-        avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
-      },      {
-        name: 'brynn',
-        avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
-      },
-    ]
     if (this.state.thisLocation != null) {
-
       return (
           <View>
             <View style={styles.locationMainView}>
               <Text>{this.state.thisLocation.name}</Text>
               <Image style={styles.locationScreenImage} source={nasoniImage} />
-              <ScrollView style={{backgroundColor:"#999b9f"}}>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
-                <View>
-                  <Text>Nameeeee</Text>
-                  <Text>Score</Text>
-                  <Text>revew content</Text>
-                </View>
+              <ScrollView style={styles.reviewList}>
+                {this.state.userWroteReview ?
+                    <View style={[styles.reviewListItem, styles.reviewListUserReview]}>
+                      <Text style={styles.reviewListItemName}>
+                        Your Review
+                        [<Text style={styles.reviewListItemScore}>{this.state.userReviewContent.rating}</Text>]
+                      </Text>
+                      <Text style={styles.reviewListItemComment}>{this.state.userReviewContent.comment}</Text>
+                    </View> : null
+                }
+                {this.state.reviewsList.map(review => {
+                  return (
+                      <View key={review.review_id} style={styles.reviewListItem}>
+                          <Text style={styles.reviewListItemName}>
+                            {review.user.name}
+                            [<Text style={styles.reviewListItemScore}>{review.rating}</Text>]
+                          </Text>
+                          <Text style={styles.reviewListItemComment}>{review.comment}</Text>
+                        </View>
+                  );
+                })}
               </ScrollView>
             </View>
 

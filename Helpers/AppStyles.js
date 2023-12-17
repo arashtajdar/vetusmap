@@ -215,9 +215,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-    zIndex: 100,
   },
-
   locationFavouriteStarButton: {
     fontSize: 40,
     shadowOpacity: 10,
@@ -259,5 +257,9 @@ export const styles = StyleSheet.create({
   },
   reviewListItemComment: {
     padding: 10,
+  },
+  favoritesButtonView: {
+    position: 'absolute',
+    bottom: 20,
   },
 });

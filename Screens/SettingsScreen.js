@@ -53,8 +53,6 @@ class SettingsScreen extends Component {
           onPress={() => this.navigateTo('Website')}>
           <Text>Website</Text>
         </TouchableOpacity>
-
-        {/* Add more settings options here as needed. */}
       </View>
     );
   }

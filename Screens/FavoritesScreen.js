@@ -29,18 +29,19 @@ const FavoritesScreen = ({navigation}) => {
         };
 
         const response = await axios.request(config);
-        setData(response.data); // Assuming the data is an array
+        console.log(response.data.data);
+        setData(response.data.data);
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchData();
+    fetchData().then(r => {});
   }, []);
 
   const renderItem = ({item}) => (
     <View style={styles.item}>
-      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.title}>{item.location_id}</Text>
     </View>
   );
 

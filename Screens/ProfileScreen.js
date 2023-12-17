@@ -119,6 +119,7 @@ class ProfileScreen extends Component {
         ) : (
           <Button title="Sign in with Google" onPress={this.handleSignIn} />
         )}
+
         <View style={styles.favoritesButtonView}>
           <Button
             title="Favorites"

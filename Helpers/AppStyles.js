@@ -268,5 +268,5 @@ export const styles = StyleSheet.create({
   },
   ReviewRatingButtonDefault: {
     borderRadius: 0,
-  },
+  }
 });

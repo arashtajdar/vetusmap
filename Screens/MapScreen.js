@@ -12,6 +12,7 @@ import FilterModal from './FilterModal';
 import {Logger} from 'aws-cloudwatch-log-browser';
 import * as Env from '../Helpers/EnvConstants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {endpointCategories} from "../Helpers/Constants";
 
 const cloudWatchConfig = {
   logGroupName: Env.logGroupName,
@@ -34,13 +35,14 @@ const Data = [
   {
     id: 2,
     name: 'Hotel',
-    selected: true,
   },
 ];
 export default class MapScreen extends React.Component {
   // Constructor
   constructor(props) {
     super(props);
+
+
     this.state = {
       latitude: constants.initialLat,
       longitude: constants.initialLong,
@@ -61,15 +63,16 @@ export default class MapScreen extends React.Component {
   componentDidMount = () => {
     this.callApiToUpdateMap();
   };
-
   // Functions
   updateRenderData = newData => {
+    console.log(newData);
     this.setState({renderData: newData});
     this.setState({
       selectedCategoryIds: this.state.renderData
         .filter(item => item.selected)
         .map(item => item.id),
     });
+    console.log(this.state.selectedCategoryIds);
     Geolocation.getCurrentPosition(loc => {
       let region = {
         latitude: loc.coords.latitude,

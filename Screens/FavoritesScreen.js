@@ -40,7 +40,7 @@ const FavoritesScreen = ({}) => {
   }, []);
 
   const renderItem = ({item}) => (
-    <View style={styles.item}>
+    <View style={styles.item} >
       <Text style={styles.title}>{item.location_id}</Text>
     </View>
   );
@@ -50,8 +50,6 @@ const FavoritesScreen = ({}) => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
-        key={item => item.id}
       />
     </SafeAreaView>
   );

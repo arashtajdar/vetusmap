@@ -27,7 +27,6 @@ function HomeStack() {
         })}
       />
       <Stack.Screen name={'Location'} component={LocationScreen} />
-      <Stack.Screen name={'Favorites'} component={FavoritesScreen} />
     </Stack.Navigator>
   );
 }
@@ -55,6 +54,7 @@ function ProfileStack() {
           headerShown: false,
         })}
       />
+        <Stack.Screen name={'Favorites'} component={FavoritesScreen} />
     </Stack.Navigator>
   );
 }

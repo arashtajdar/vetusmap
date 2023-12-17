@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import {styles} from '../Helpers/AppStyles';
 import * as constants from '../Helpers/Constants';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class FilterModal extends Component {
   constructor(props) {
@@ -16,9 +18,38 @@ export default class FilterModal extends Component {
     this.state = {
       modalVisible: false,
       selectedItem: null,
-      renderData: props.renderData,
+      renderData: [],
     };
   }
+  componentDidMount() {
+    this.fetchCategories(); // Fetch categories when the component mounts
+  }
+  // Add a method to fetch categories from the API
+  fetchCategories = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: constants.apiBaseUrl + constants.endpointCategories,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+        },
+      };
+
+      const response = await axios.request(config);
+      const categories = response.data.data; // Assuming the API response contains an array of categories
+      const renderData = categories.map(category => ({
+        id: category.category_id,
+        name: category.name,
+        selected: false, // Initialize selected as false for each category
+      }));
+      this.setState({ renderData });
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
   onPressHandler(id) {
     for (let data of this.state.renderData) {
       if (data.id === id) {

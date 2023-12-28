@@ -22,7 +22,7 @@ let selectedLocation = [];
 // selectedLocation.propTypes = {
 //   name: PropTypes.string,
 //   favorites: PropTypes.array,
-// };
+// }; todo
 export default class LocationScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -51,7 +51,8 @@ export default class LocationScreen extends React.Component {
 
   checkLogin = async () => {
     const value = await AsyncStorage.getItem('accessToken');
-    await this.getAllReviews();
+    await this.getAllReviews(value);
+    await this.getAllUserFavs();
     if (value) {
       this.setState({
         loggedIn: true,
@@ -64,6 +65,7 @@ export default class LocationScreen extends React.Component {
   };
   WriteReview = async (rating, comment) => {
     const token = await AsyncStorage.getItem('token');
+    const googleToken = await AsyncStorage.getItem('accessToken');
 
     let data = JSON.stringify({
       location_id: this.state.thisLocation.id,
@@ -84,8 +86,16 @@ export default class LocationScreen extends React.Component {
 
     axios
       .request(config)
-      .then(response => {
-        console.log(JSON.stringify(response.data));
+      .then(() => {
+        this.RemoveFromFavorites().then(() => {
+          Toast.show({
+            type: 'info',
+            text1: constants.reviewAdded,
+            position: 'bottom',
+            bottomOffset: 22,
+          });
+        });
+        this.getAllReviews(googleToken);
       })
       .catch(error => {
         console.log(error);
@@ -168,7 +178,7 @@ export default class LocationScreen extends React.Component {
         console.log(error);
       });
   };
-  getAllReviews = async () => {
+  getAllReviews = async (specificGoogleToken) => {
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
@@ -186,14 +196,46 @@ export default class LocationScreen extends React.Component {
     await axios
       .request(config)
       .then(response => {
+        const filteredArray = response.data.data.filter(item =>
+            item.user && item.user.google_token === specificGoogleToken
+        );
+        console.log(!!filteredArray.length);
+        console.log(filteredArray[0]);
+        console.log(response.data.data);
+        console.log(specificGoogleToken);
         this.setState({
           reviewsList: response.data.data,
+          userWroteReview: !!filteredArray.length,
+          userReviewContent: filteredArray[0],
         });
       })
       .catch(error => {
         console.log(error);
       });
   };
+  getAllUserFavs = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: constants.apiBaseUrl + constants.endpointFetchAllUsersFavorites,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    };
+
+    await axios.request(config).then( response => {
+      const filteredArray = response.data.data.filter(item =>
+          item.location && item.location.id === this.state.thisLocation.id
+    );
+      this.setState({
+        isInFavouriteList: !!filteredArray.length,
+      });
+        }).catch(error => {
+      console.log(error)
+    });
+  }
   setModalVisible = flag => {
     this.setState({
       modalVisible: flag,
@@ -259,8 +301,8 @@ export default class LocationScreen extends React.Component {
             </View>
           </Modal>
           <View style={styles.locationMainView}>
-            <Text>{this.state.thisLocation.name}</Text>
             <Image style={styles.locationScreenImage} source={nasoniImage} />
+            <Text>{this.state.thisLocation.description}</Text>
             <ScrollView style={styles.reviewList}>
               {this.state.userWroteReview ? (
                 <View
@@ -281,7 +323,7 @@ export default class LocationScreen extends React.Component {
                 return (
                   <View key={review.review_id} style={styles.reviewListItem}>
                     <Text style={styles.reviewListItemName}>
-                      {review.user.name}[
+                      {review.user.name} [
                       <Text style={styles.reviewListItemScore}>
                         {review.rating}
                       </Text>
@@ -327,4 +369,6 @@ export default class LocationScreen extends React.Component {
       );
     }
   }
+
+
 }

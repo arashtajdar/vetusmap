@@ -18,3 +18,4 @@ export const showFilterText = 'Show Filters';
 export const hideFilterText = 'Close Filters';
 export const favouritesAdded = 'Added to favourites';
 export const favouritesRemoved = 'Removed from favourites';
+export const reviewAdded = 'Review added';

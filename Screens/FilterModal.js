@@ -44,7 +44,7 @@ export default class FilterModal extends Component {
       const renderData = categories.map(category => ({
         id: category.category_id,
         name: category.name,
-        selected: false, // Initialize selected as false for each category
+        selected: true, // Initialize selected as false for each category
       }));
       this.setState({ renderData });
     } catch (error) {

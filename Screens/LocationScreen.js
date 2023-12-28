@@ -177,7 +177,7 @@ export default class LocationScreen extends React.Component {
         console.log(error);
       });
   };
-  getAllReviews = async (specificGoogleToken) => {
+  getAllReviews = async specificGoogleToken => {
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
@@ -195,8 +195,8 @@ export default class LocationScreen extends React.Component {
     await axios
       .request(config)
       .then(response => {
-        const filteredArray = response.data.data.filter(item =>
-            item.user && item.user.google_token === specificGoogleToken
+        const filteredArray = response.data.data.filter(
+          item => item.user && item.user.google_token === specificGoogleToken,
         );
         console.log(!!filteredArray.length);
         console.log(filteredArray[0]);
@@ -224,17 +224,21 @@ export default class LocationScreen extends React.Component {
       },
     };
 
-    await axios.request(config).then( response => {
-      const filteredArray = response.data.data.filter(item =>
-          item.location && item.location.id === this.state.thisLocation.id
-    );
-      this.setState({
-        isInFavouriteList: !!filteredArray.length,
+    await axios
+      .request(config)
+      .then(response => {
+        const filteredArray = response.data.data.filter(
+          item =>
+            item.location && item.location.id === this.state.thisLocation.id,
+        );
+        this.setState({
+          isInFavouriteList: !!filteredArray.length,
+        });
+      })
+      .catch(error => {
+        console.log(error);
       });
-        }).catch(error => {
-      console.log(error)
-    });
-  }
+  };
   setModalVisible = flag => {
     this.setState({
       modalVisible: flag,
@@ -277,21 +281,19 @@ export default class LocationScreen extends React.Component {
                         color={
                           this.state.selectedRating &&
                           n > this.state.selectedRating
-                              ? '#ababab'
-                              : '#ffcd00'
+                            ? '#ababab'
+                            : '#ffcd00'
                         }
-                        onPress={() => this.rate(n)}
-
-                      >
+                        onPress={() => this.rate(n)}>
                         <MaterialCommunityIcons
-                            name={'star'}
-                            style={[
-                              styles.locationFavouritePlusButton,
-                              this.state.selectedRating &&
-                              n > this.state.selectedRating
-                                  ? null
-                                  : styles.locationFavouritePlusButtonActive,
-                            ]}
+                          name={'star'}
+                          style={[
+                            styles.locationFavouritePlusButton,
+                            this.state.selectedRating &&
+                            n > this.state.selectedRating
+                              ? null
+                              : styles.locationFavouritePlusButtonActive,
+                          ]}
                         />
                       </Pressable>
                     );
@@ -379,6 +381,4 @@ export default class LocationScreen extends React.Component {
       );
     }
   }
-
-
 }

@@ -40,17 +40,14 @@ const FavoritesScreen = ({}) => {
   }, []);
 
   const renderItem = ({item}) => (
-    <View style={styles.item} >
+    <View style={styles.item}>
       <Text style={styles.title}>{item.location.name}</Text>
     </View>
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-      />
+      <FlatList data={data} renderItem={renderItem} />
     </SafeAreaView>
   );
 };

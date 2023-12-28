@@ -201,11 +201,11 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalTextInput: {
-    width: "100%",
+    width: '100%',
     padding: 10,
     borderWidth: 1,
-    borderStyle: "dotted",
-    borderColor: "#000000"
+    borderStyle: 'dotted',
+    borderColor: '#000000',
   },
   filterCategoryName: {
     padding: 10,
@@ -275,5 +275,5 @@ export const styles = StyleSheet.create({
   ReviewRatingButtonDefault: {
     borderRadius: 0,
     padding: 5,
-  }
+  },
 });

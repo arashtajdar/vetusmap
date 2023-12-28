@@ -46,7 +46,7 @@ export default class FilterModal extends Component {
         name: category.name,
         selected: true, // Initialize selected as false for each category
       }));
-      this.setState({ renderData });
+      this.setState({renderData});
     } catch (error) {
       console.error('Error fetching categories:', error);
     }

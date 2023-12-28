@@ -54,7 +54,7 @@ function ProfileStack() {
           headerShown: false,
         })}
       />
-        <Stack.Screen name={'Favorites'} component={FavoritesScreen} />
+      <Stack.Screen name={'Favorites'} component={FavoritesScreen} />
     </Stack.Navigator>
   );
 }

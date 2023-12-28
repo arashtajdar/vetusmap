@@ -12,7 +12,6 @@ import FilterModal from './FilterModal';
 import {Logger} from 'aws-cloudwatch-log-browser';
 import * as Env from '../Helpers/EnvConstants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {endpointCategories} from "../Helpers/Constants";
 
 const cloudWatchConfig = {
   logGroupName: Env.logGroupName,
@@ -41,7 +40,6 @@ export default class MapScreen extends React.Component {
   // Constructor
   constructor(props) {
     super(props);
-
 
     this.state = {
       latitude: constants.initialLat,

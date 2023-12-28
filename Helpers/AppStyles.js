@@ -156,7 +156,6 @@ export const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     marginTop: 22,
   },
   modalView: {
@@ -201,6 +200,13 @@ export const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
+  modalTextInput: {
+    width: "100%",
+    padding: 10,
+    borderWidth: 1,
+    borderStyle: "dotted",
+    borderColor: "#000000"
+  },
   filterCategoryName: {
     padding: 10,
     margin: 5,
@@ -216,14 +222,14 @@ export const styles = StyleSheet.create({
     bottom: 20,
     right: 20,
   },
-  locationFavouriteStarButton: {
+  locationFavouritePlusButton: {
     fontSize: 40,
     shadowOpacity: 10,
     textShadowRadius: 10,
     textShadowColor: '#000000',
     color: '#ffffff',
   },
-  locationFavouriteStarButtonActive: {
+  locationFavouritePlusButtonActive: {
     color: '#e8cb0a',
   },
   locationReviewView: {
@@ -268,5 +274,6 @@ export const styles = StyleSheet.create({
   },
   ReviewRatingButtonDefault: {
     borderRadius: 0,
+    padding: 5,
   }
 });

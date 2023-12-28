@@ -16,7 +16,6 @@ import Toast from 'react-native-toast-message';
 import * as constants from '../Helpers/Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import {Button} from '@rneui/base';
 
 let selectedLocation = [];
 // selectedLocation.propTypes = {
@@ -36,7 +35,7 @@ export default class LocationScreen extends React.Component {
       reviewsList: [],
       modalVisible: false,
       commentValue: '',
-      selectedRating: null,
+      selectedRating: 5,
     };
   }
   componentDidMount = () => {
@@ -262,7 +261,7 @@ export default class LocationScreen extends React.Component {
                   multiline
                   numberOfLines={6}
                   maxLength={100}
-                  style={{padding: 10}}
+                  style={styles.modalTextInput}
                   onChangeText={val => {
                     this.setState({
                       commentValue: val,
@@ -272,18 +271,29 @@ export default class LocationScreen extends React.Component {
                 <View style={styles.ReviewRatingContainer}>
                   {ratesArray.map(n => {
                     return (
-                      <Button
+                      <Pressable
                         key={n}
-                        style={styles.ReviewRatingButtonDefault}
+                        style={[styles.ReviewRatingButtonDefault]}
                         color={
                           this.state.selectedRating &&
                           n > this.state.selectedRating
-                            ? '#ababab'
-                            : '#ffcd00'
+                              ? '#ababab'
+                              : '#ffcd00'
                         }
-                        title={n.toString()}
                         onPress={() => this.rate(n)}
-                      />
+
+                      >
+                        <MaterialCommunityIcons
+                            name={'star'}
+                            style={[
+                              styles.locationFavouritePlusButton,
+                              this.state.selectedRating &&
+                              n > this.state.selectedRating
+                                  ? null
+                                  : styles.locationFavouritePlusButtonActive,
+                            ]}
+                        />
+                      </Pressable>
                     );
                   })}
                 </View>
@@ -343,11 +353,11 @@ export default class LocationScreen extends React.Component {
               style={styles.locationFavouriteView}
               onPress={this.ToggleFavourite}>
               <MaterialCommunityIcons
-                name={'star'}
+                name={'book-plus'}
                 style={[
-                  styles.locationFavouriteStarButton,
+                  styles.locationFavouritePlusButton,
                   this.state.isInFavouriteList
-                    ? styles.locationFavouriteStarButtonActive
+                    ? styles.locationFavouritePlusButtonActive
                     : null,
                 ]}
               />
@@ -358,7 +368,7 @@ export default class LocationScreen extends React.Component {
               style={styles.locationReviewView}
               onPress={() => this.setModalVisible(true)}>
               <MaterialCommunityIcons
-                name={'pencil-circle-outline'}
+                name={'comment-plus-outline'}
                 style={styles.locationReviewButton}
               />
             </TouchableOpacity>
